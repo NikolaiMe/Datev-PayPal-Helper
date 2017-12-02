@@ -8,15 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
+using System.Runtime.InteropServices;
+using Reiner_Autoworker.DataStructures;
 
 namespace Reiner_Autoworker
 {
     public partial class Form1 : Form
     {
+        private string[,] dataPacket;
         public Form1()
         {
             InitializeComponent();
-            
             parsData();
         }
 
@@ -26,8 +28,10 @@ namespace Reiner_Autoworker
             {
                 DataTable dataTable = new DataTable();
 
+                Transaktion trans = new Transaktion();
+
                 parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(";");
+                parser.SetDelimiters(",");
                 try
                 {
                     string[] header = parser.ReadFields();
@@ -43,7 +47,6 @@ namespace Reiner_Autoworker
                     {
                         //Process row
                         string[] fields = parser.ReadFields();
-                        Object[] row = { fields[0] };
                         dataTable.Rows.Add(fields);
                         //foreach (string field in fields)
                         //{
@@ -71,6 +74,38 @@ namespace Reiner_Autoworker
             Control control = (Control)sender;
             myTable.Size = new Size (control.Width-40,control.Height-120);
 
+        }
+
+
+        // Get a handle to an application window.
+        [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string lpClassName,
+            string lpWindowName);
+
+        // Activate an application window.
+        [DllImport("USER32.DLL")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Get a handle to the Calculator application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr calculatorHandle = FindWindow(null, "Unbenannt - Editor");
+
+            // Verify that Calculator is a running process.
+            if (calculatorHandle == IntPtr.Zero)
+            {
+                MessageBox.Show("Calculator is not running.");
+                return;
+            }
+
+            // Make Calculator the foreground application and send it 
+            // a set of calculations.
+            SetForegroundWindow(calculatorHandle);
+            SendKeys.SendWait("111");
+            SendKeys.SendWait("*");
+            SendKeys.SendWait("11");
+            SendKeys.SendWait("=");
         }
     }
 
