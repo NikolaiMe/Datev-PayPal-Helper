@@ -24,14 +24,14 @@ namespace Reiner_Autoworker
 
         private void parsData()
         {
-            using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Download.csv"))
+            using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
             {
                 DataTable dataTable = new DataTable();
 
                 Transaktion trans = new Transaktion();
 
                 parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
+                parser.SetDelimiters(";");
                 try
                 {
                     string[] header = parser.ReadFields();
