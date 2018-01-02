@@ -28,7 +28,7 @@ namespace Reiner_Autoworker
             {
                 DataTable dataTable = new DataTable();
 
-                Transaktion trans = new Transaktion();
+                payPalTransaction trans = new payPalTransaction("Nikolai Niko","10","12345","EUR","bla","eBay");
 
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(";");
