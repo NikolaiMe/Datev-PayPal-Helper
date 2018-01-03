@@ -34,30 +34,73 @@ namespace Reiner_Autoworker.DataStructures
             return fSum;
         }
     }
+    public enum TransTypes {SOLL, HABEN, MEMO, ERROR};
+    public enum TransReasons {EBAY, ONLINESHOP, REPAYMENT, DEBIT, TRANSLATION, ERROR};
 
     public class payPalTransaction : Transaction
     {
         private String[] listOfCompanyIndicators = new  String[] { "GmbH", "AG", "GBR", "OHG", "KG", "eG", "se",  };
-
+        
         public string currency { get; private set; }                //The currency of the transaction
         public string transID { get; private set; }                 //The paypal identification number of the transaction
-        public string transType { get; private set; }               //The type of the transaction (soll, haben...)
-        public string source { get; private set; }                  //The source of the transaction (ebay, online shop)
+        public TransTypes transType { get; private set; }               //The type of the transaction (soll, haben...)
+        public TransReasons transReason { get; private set; }             //The source of the transaction (ebay, online shop)
         public string invoiceNumber { get; set; } = "";             //The invoice number --> To be filled with data from ebay/online shop
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
 
-        public bool noInvoiceFound { get; set; } = true;         //Must be set false if invoice number could be found
-        public bool nameIssueFound { get; set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
+        public bool noInvoiceFound { get; set; } = true;            //Must be set false if invoice number could be found
+        public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
+        public bool foreignCurrencyFound { get; private set; } = false;
 
 
-
-        public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string source) : base(customerName, sum)
+        public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee) : base(customerName, sum)
         {
             this.transID = transID;
+
             this.currency = currency;
-            this.transType = transType;
-            this.source = source;
+            if (currency != "EUR") foreignCurrencyFound = true;
+
+            switch(transType)
+            {
+                case "Haben":
+                    this.transType = TransTypes.HABEN;
+                    break;
+                case "Soll":
+                    this.transType = TransTypes.SOLL;
+                    break;
+                case "Memo":
+                    this.transType = TransTypes.MEMO;
+                    break;
+                default:
+                    this.transType = TransTypes.ERROR;
+                    break;
+            }
+
+            switch(transReason)
+            {
+                case "eBay-Auktionszahlung":
+                    this.transReason = TransReasons.EBAY;
+                    break;
+                case "PayPal Express-Zahlung":
+                    this.transReason = TransReasons.ONLINESHOP;
+                    break;
+                case "Allgemeine Abbuchung":
+                    this.transReason = TransReasons.DEBIT;
+                    break;
+                case "Rückzahlung":
+                    this.transReason = TransReasons.REPAYMENT;
+                    break;
+                case "Währungsumrechnung durch Nutzer":
+                    this.transReason = TransReasons.TRANSLATION;
+                    break;
+                default:
+                    this.transReason = TransReasons.ERROR;
+                    break;
+            }
+
+            this.fee = convertSum(fee);
+
             if(!checkForCompany(customerName, listOfCompanyIndicators))
             {
                 if (isNameValid(customerName))

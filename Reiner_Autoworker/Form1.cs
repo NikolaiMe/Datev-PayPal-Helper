@@ -22,11 +22,14 @@ namespace Reiner_Autoworker
             parsData();
         }
 
+        private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
+
         private void parsData()
         {
             using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
             {
                 DataTable dataTable = new DataTable();
+                List<int>
 
                 payPalTransaction trans = new payPalTransaction("Nikolai Niko","10","12345","EUR","bla","eBay");
 
