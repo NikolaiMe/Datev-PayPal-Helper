@@ -25,7 +25,15 @@ namespace Reiner_Autoworker.DataStructures
             float fSum = 0f;
             if (sumString.Contains("."))
             {
-                fSum = float.Parse(sumString, CultureInfo.InvariantCulture.NumberFormat);
+                if (sumString.Contains(","))
+                {
+                    sumString = sumString.Replace(".", string.Empty);
+                    fSum = float.Parse(sumString);
+                }
+                else
+                {
+                    fSum = float.Parse(sumString, CultureInfo.InvariantCulture.NumberFormat);
+                }
             }
             else
             {
@@ -127,6 +135,7 @@ namespace Reiner_Autoworker.DataStructures
         {
             int index = 0;
             int counter = 0;
+            if (name.Equals("")) return false;
             do
             {
                 index = name.IndexOf(" ", index+1);

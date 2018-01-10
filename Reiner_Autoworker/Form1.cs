@@ -10,16 +10,26 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 using System.Runtime.InteropServices;
 using Reiner_Autoworker.DataStructures;
+using Reiner_Autoworker.WorkerClasses;
 
 namespace Reiner_Autoworker
 {
     public partial class Form1 : Form
     {
         private string[,] dataPacket;
+
+        public void testCallback(List<payPalTransaction> liste, int errorCode)
+        {
+            MessageBox.Show(errorCode.ToString());
+        }
+
         public Form1()
         {
             InitializeComponent();
-            parsData();
+            //parsData();
+            ParseCompletedCallBack callback = testCallback;
+            PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
+            parser.startParsing();
         }
 
         private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
@@ -29,9 +39,7 @@ namespace Reiner_Autoworker
             using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
             {
                 DataTable dataTable = new DataTable();
-                List<int>
-
-                payPalTransaction trans = new payPalTransaction("Nikolai Niko","10","12345","EUR","bla","eBay");
+                payPalTransaction trans = new payPalTransaction("Nikolai Niko","10","12345","EUR","bla","eBay","20");
 
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(";");
@@ -110,7 +118,11 @@ namespace Reiner_Autoworker
             SendKeys.SendWait("11");
             SendKeys.SendWait("=");
         }
+
+        
     }
+
+    
 
 
 }
