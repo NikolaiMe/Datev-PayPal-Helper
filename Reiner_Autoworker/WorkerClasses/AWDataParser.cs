@@ -31,6 +31,7 @@ namespace Reiner_Autoworker.WorkerClasses
 
         public void startParsing()
         {
+            ThreadStart parsingThread
             Thread parsingThread = new Thread(pPPThread);
             parsingThread.Start();
         }
@@ -43,7 +44,7 @@ namespace Reiner_Autoworker.WorkerClasses
             {
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(",");
-                //try
+               // try
                 {
                     string[] header = parser.ReadFields();
                     int[] dataPositions = new int[7];

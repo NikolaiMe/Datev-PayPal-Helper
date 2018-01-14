@@ -16,18 +16,48 @@ namespace Reiner_Autoworker
 {
     public partial class Form1 : Form
     {
-        private string[,] dataPacket;
+        private string[] tableTitles = new string[] {
+            "Name",
+            "Umsatz",
+            "Währung",
+            "Auswirkung auf Guthaben",
+            "Ursprung",
+            "Gebühr",
+            "Rechnungsnummer"
+        };
 
-        public void testCallback(List<payPalTransaction> liste, int errorCode)
+        private DataTable dataTable = new DataTable();
+
+
+        public void payPalParserCallback(List<payPalTransaction> liste, int errorCode)
         {
-            MessageBox.Show(errorCode.ToString());
+            if(errorCode == 0)
+            {
+                DataColumn[] columns = new DataColumn[7];
+                for (int i = 0; i < 7; i++)
+                {
+                    columns[i] = new DataColumn(tableTitles[i]);
+                }
+                dataTable.Columns.AddRange(columns);
+
+                foreach(payPalTransaction trans in liste)
+                {
+                    string[] fields = new string[] { trans.customerName, trans.sum.ToString(), trans.currency.ToString(), trans.transType.ToString(), trans.transReason.ToString(), trans.fee.ToString() };
+                    dataTable.Rows.Add(fields);
+                }
+            }
+            else
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode "+ errorCode.ToString());
+            }
+            
         }
 
         public Form1()
         {
             InitializeComponent();
             //parsData();
-            ParseCompletedCallBack callback = testCallback;
+            ParseCompletedCallBack callback = payPalParserCallback;
             PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
             parser.startParsing();
         }
@@ -73,6 +103,7 @@ namespace Reiner_Autoworker
                 }
             }
         }
+
 
 
         private void Form1_Load(object sender, EventArgs e)
