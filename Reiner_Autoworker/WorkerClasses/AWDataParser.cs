@@ -31,7 +31,6 @@ namespace Reiner_Autoworker.WorkerClasses
 
         public void startParsing()
         {
-            ThreadStart parsingThread
             Thread parsingThread = new Thread(pPPThread);
             parsingThread.Start();
         }

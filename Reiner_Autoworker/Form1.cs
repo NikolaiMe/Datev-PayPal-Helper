@@ -45,12 +45,12 @@ namespace Reiner_Autoworker
                     string[] fields = new string[] { trans.customerName, trans.sum.ToString(), trans.currency.ToString(), trans.transType.ToString(), trans.transReason.ToString(), trans.fee.ToString() };
                     dataTable.Rows.Add(fields);
                 }
+                Invoke(new Action(() => { this.myTable.DataSource = dataTable; }));
             }
             else
             {
                 MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode "+ errorCode.ToString());
             }
-            
         }
 
         public Form1()
