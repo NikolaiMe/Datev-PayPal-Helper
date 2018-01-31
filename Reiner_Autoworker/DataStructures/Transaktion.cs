@@ -168,4 +168,16 @@ namespace Reiner_Autoworker.DataStructures
                 return true;
         }
     }
+
+    public class ebayPPTransaction : Transaction
+    {
+        public string transID { get; private set; }                 //The paypal identification number of the transaction
+        public string invoiceNumber { get; set; }             //The invoice number --> To be filled with data from ebay/online shop
+
+        public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber):base(name, sum)
+        {
+            this.transID = paypalTransactionCode;
+            this.invoiceNumber = invoiceNumber;
+        }
+    }
 }

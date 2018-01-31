@@ -9,7 +9,8 @@ using Reiner_Autoworker.DataStructures;
 
 namespace Reiner_Autoworker.WorkerClasses
 {
-    public delegate void ParseCompletedCallBack(List<payPalTransaction> transactionList, int errorCode);
+    public delegate void PaypalParseCompletedCallBack(List<payPalTransaction> transactionList, int errorCode);
+    public delegate void EbayParseCompletedCallBack(List<ebayPPTransaction> ebayList, int errorCode);
     
 
 
@@ -20,10 +21,10 @@ namespace Reiner_Autoworker.WorkerClasses
         public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
         private string[] titleArray = new string[] { "Name", "Brutto", "Transaktionscode", "Währung", "Auswirkung auf Guthaben", "Typ", "Gebühr"};
         String fileLocation;
-        ParseCompletedCallBack callback;
+        PaypalParseCompletedCallBack callback;
         int test = 0;
 
-        public PayPalParser(string fileLocation, ParseCompletedCallBack callback)
+        public PayPalParser(string fileLocation, PaypalParseCompletedCallBack callback)
         {
             this.fileLocation = fileLocation;
             this.callback = callback;
@@ -46,10 +47,10 @@ namespace Reiner_Autoworker.WorkerClasses
                // try
                 {
                     string[] header = parser.ReadFields();
-                    int[] dataPositions = new int[7];
+                    int[] dataPositions = new int[titleArray.Length];
                     int size = header.Length;
                     int counter = 0;
-                    for (int i = 0; i < 7; i++)
+                    for (int i = 0; i < titleArray.Length; i++)
                     {
                         while (!titleArray[i].Equals(header[counter]))
                         {
@@ -80,9 +81,11 @@ namespace Reiner_Autoworker.WorkerClasses
                         {
                             //Process row
                             string[] fields = parser.ReadFields();
-                            liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]]));
+                            if (!fields[dataPositions[2]].Equals(""))
+                            {
+                                liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]]));
+                            }
                         }
-
                         callback(liste, 0);
 
 
@@ -102,5 +105,93 @@ namespace Reiner_Autoworker.WorkerClasses
         }
     }
 
+
+
+    class ebayPPParser
+    {
+        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
+        private string[] titleArray = new string[] { "Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
+        String fileLocation;
+        EbayParseCompletedCallBack callback;
+        int test = 0;
+
+        public ebayPPParser(string fileLocation, EbayParseCompletedCallBack callback)
+        {
+            this.fileLocation = fileLocation;
+            this.callback = callback;
+        }
+
+        public void startParsing()
+        {
+            Thread parsingThread = new Thread(pEbayPPThread);
+            parsingThread.Start();
+        }
+
+        public void pEbayPPThread()
+        {
+            List<ebayPPTransaction> liste = new List<ebayPPTransaction>();
+            bool dataNotFound = false;
+            using (TextFieldParser parser = new TextFieldParser(fileLocation))
+            {
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+                // try
+                {
+                    string[] header = parser.ReadFields();
+                    int[] dataPositions = new int[titleArray.Length];
+                    int size = header.Length;
+                    int counter = 0;
+                    for (int i = 0; i < titleArray.Length; i++)
+                    {
+                        while (!titleArray[i].Equals(header[counter]))
+                        {
+                            int test = String.Compare(titleArray[i], header[counter], false);
+                            if (counter < size - 1)
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                dataNotFound = true;
+                                break;
+                            }
+                        }
+                        if (!dataNotFound)
+                        {
+                            dataPositions[i] = counter;
+                            counter = 0;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (!dataNotFound)
+                    {
+                        while (!parser.EndOfData)
+                        {
+                            //Process row
+                            string[] fields = parser.ReadFields();
+                            liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]]));
+                        }
+
+                        callback(liste, 0);
+
+
+                    }
+                    else
+                    {
+                        callback(liste, DATA_NOT_FOUND_ERROR);
+                    }
+                }
+                /*catch
+                {
+                    callback(liste, DATA_ERROR);
+                }*/
+
+
+            }
+        }
+    }
 
 }

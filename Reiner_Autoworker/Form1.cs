@@ -57,7 +57,7 @@ namespace Reiner_Autoworker
         {
             InitializeComponent();
             //parsData();
-            ParseCompletedCallBack callback = payPalParserCallback;
+            PaypalParseCompletedCallBack callback = payPalParserCallback;
             PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
             parser.startParsing();
         }
