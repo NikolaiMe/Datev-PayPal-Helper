@@ -16,6 +16,9 @@ namespace Reiner_Autoworker
 {
     public partial class Form1 : Form
     {
+
+        List<payPalTransaction> datenSatz;
+
         private string[] tableTitles = new string[] {
             "Name",
             "Umsatz",
@@ -33,7 +36,8 @@ namespace Reiner_Autoworker
         {
             if(errorCode == 0)
             {
-                DataColumn[] columns = new DataColumn[7];
+                datenSatz = liste;
+               /* DataColumn[] columns = new DataColumn[7];
                 for (int i = 0; i < 7; i++)
                 {
                     columns[i] = new DataColumn(tableTitles[i]);
@@ -44,8 +48,55 @@ namespace Reiner_Autoworker
                 {
                     string[] fields = new string[] { trans.customerName, trans.sum.ToString(), trans.currency.ToString(), trans.transType.ToString(), trans.transReason.ToString(), trans.fee.ToString() };
                     dataTable.Rows.Add(fields);
-                }
-                Invoke(new Action(() => { this.myTable.DataSource = dataTable; }));
+                }*/
+                Invoke(new Action(() => {
+                    this.myTable.AutoGenerateColumns = false;
+                    this.myTable.AllowUserToAddRows = false;
+                    this.myTable.DataSource = datenSatz;
+
+                    DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
+                    column1.Name = "customerName";
+                    column1.HeaderText = tableTitles[0];
+                    column1.DataPropertyName = "customerName";
+                    this.myTable.Columns.Add(column1);
+
+                    DataGridViewTextBoxColumn column2 = new DataGridViewTextBoxColumn();
+                    column2.Name = "sum";
+                    column2.HeaderText = tableTitles[1];
+                    column2.DataPropertyName = "sum";
+                    this.myTable.Columns.Add(column2);
+
+                    DataGridViewTextBoxColumn column3 = new DataGridViewTextBoxColumn();
+                    column3.Name = "currency";
+                    column3.HeaderText = tableTitles[2];
+                    column3.DataPropertyName = "currency";
+                    this.myTable.Columns.Add(column3);
+
+                    DataGridViewTextBoxColumn column4 = new DataGridViewTextBoxColumn();
+                    column4.Name = "transType";
+                    column4.HeaderText = tableTitles[3];
+                    column4.DataPropertyName = "transType";
+                    this.myTable.Columns.Add(column4);
+
+                    DataGridViewTextBoxColumn column5 = new DataGridViewTextBoxColumn();
+                    column5.Name = "transReason";
+                    column5.HeaderText = tableTitles[4];
+                    column5.DataPropertyName = "transReason";
+                    this.myTable.Columns.Add(column5);
+
+                    DataGridViewTextBoxColumn column6 = new DataGridViewTextBoxColumn();
+                    column6.Name = "fee";
+                    column6.HeaderText = tableTitles[5];
+                    column6.DataPropertyName = "fee";
+                    this.myTable.Columns.Add(column6);
+
+                    DataGridViewTextBoxColumn column7 = new DataGridViewTextBoxColumn();
+                    column7.Name = "invoiceNumber";
+                    column7.HeaderText = tableTitles[6];
+                    column7.DataPropertyName = "invoiceNumber";
+                    this.myTable.Columns.Add(column7);
+
+                }));
             }
             else
             {
@@ -150,7 +201,12 @@ namespace Reiner_Autoworker
             SendKeys.SendWait("=");
         }
 
-        
+        private void button2_Click(object sender, EventArgs e)
+        {
+            datenSatz[0].invoiceNumber = "12345";
+            myTable.DataSource = null;
+            myTable.DataSource = datenSatz;
+        }
     }
 
     
