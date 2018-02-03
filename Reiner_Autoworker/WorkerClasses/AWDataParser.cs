@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualBasic.FileIO;
+using Microsoft.VisualBasic;
 using Reiner_Autoworker.DataStructures;
 
 namespace Reiner_Autoworker.WorkerClasses
@@ -127,6 +128,18 @@ namespace Reiner_Autoworker.WorkerClasses
             parsingThread.Start();
         }
 
+        private int findFirstNumber(String price)
+        {
+            if (price.Equals("")) return 0;
+    
+            int index = 0;
+            while ((index < price.Length) && (!((Strings.GetChar(price, index+1)>='0') && (Strings.GetChar(price, index+1) <= '9'))))
+            {
+                index++;
+            }
+            return index;
+        }
+
         public void pEbayPPThread()
         {
             List<ebayPPTransaction> liste = new List<ebayPPTransaction>();
@@ -134,7 +147,7 @@ namespace Reiner_Autoworker.WorkerClasses
             using (TextFieldParser parser = new TextFieldParser(fileLocation))
             {
                 parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
+                parser.SetDelimiters(";");
                 // try
                 {
                     string[] header = parser.ReadFields();
@@ -172,7 +185,7 @@ namespace Reiner_Autoworker.WorkerClasses
                         {
                             //Process row
                             string[] fields = parser.ReadFields();
-                            liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]]));
+                            liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]]));
                         }
 
                         callback(liste, 0);

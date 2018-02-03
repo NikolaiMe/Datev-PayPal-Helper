@@ -22,6 +22,8 @@ namespace Reiner_Autoworker.DataStructures
 
         protected float convertSum(string sumString)
         {
+            if (sumString.Equals("")) return 0f;
+
             float fSum = 0f;
             if (sumString.Contains("."))
             {

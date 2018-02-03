@@ -104,6 +104,36 @@ namespace Reiner_Autoworker
             }
         }
 
+        public void ebayParserCallback(List<ebayPPTransaction> ebayList, int errorCode)
+        {
+            if(errorCode == 0)
+            {
+                foreach (payPalTransaction payPal in datenSatz)
+                {
+                    foreach(ebayPPTransaction ebay in ebayList)
+                    {
+                        if(payPal.transID.Equals(ebay.transID))
+                        {
+                            payPal.invoiceNumber = ebay.invoiceNumber;
+                        }
+                    }
+                }
+
+                Invoke(new Action(() =>
+                {
+                    myTable.DataSource = null;
+                    myTable.DataSource = datenSatz;
+                }
+                ));
+
+            }
+            else
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode " + errorCode.ToString());
+
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -111,6 +141,10 @@ namespace Reiner_Autoworker
             PaypalParseCompletedCallBack callback = payPalParserCallback;
             PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
             parser.startParsing();
+
+            EbayParseCompletedCallBack eCallback = ebayParserCallback;
+            ebayPPParser eParser = new ebayPPParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv", eCallback);
+            eParser.startParsing();
         }
 
         private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
@@ -201,12 +235,6 @@ namespace Reiner_Autoworker
             SendKeys.SendWait("=");
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            datenSatz[0].invoiceNumber = "12345";
-            myTable.DataSource = null;
-            myTable.DataSource = datenSatz;
-        }
     }
 
     
