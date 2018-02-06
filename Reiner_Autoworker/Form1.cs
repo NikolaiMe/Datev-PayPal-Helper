@@ -154,8 +154,6 @@ namespace Reiner_Autoworker
             using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
             {
                 DataTable dataTable = new DataTable();
-                payPalTransaction trans = new payPalTransaction("Nikolai Niko","10","12345","EUR","bla","eBay","20");
-
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(";");
                 try

@@ -58,18 +58,20 @@ namespace Reiner_Autoworker.DataStructures
         public string invoiceNumber { get; set; } = "";             //The invoice number --> To be filled with data from ebay/online shop
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
+        public DateTime date { get; private set; }
 
         public bool noInvoiceFound { get; set; } = true;            //Must be set false if invoice number could be found
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
 
 
-        public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee) : base(customerName, sum)
+        public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
             this.transID = transID;
 
             this.currency = currency;
             if (currency != "EUR") foreignCurrencyFound = true;
+            this.date = convertDate(timeDate);
 
             switch(transType)
             {
@@ -131,6 +133,12 @@ namespace Reiner_Autoworker.DataStructures
             Console.WriteLine(outputName);
             
 
+        }
+
+        private DateTime convertDate(string timeDate)
+        {
+            return DateTime.ParseExact(timeDate, "dd.MM.yyyyHH:mm:ss",
+                                       System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private bool isNameValid(string name)           // Method checks whether there is more than one Space in the name --> If yes the user have to choose the surname

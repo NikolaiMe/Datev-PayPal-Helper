@@ -20,10 +20,9 @@ namespace Reiner_Autoworker.WorkerClasses
     class PayPalParser
     {
         public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
-        private string[] titleArray = new string[] { "Name", "Brutto", "Transaktionscode", "Währung", "Auswirkung auf Guthaben", "Typ", "Gebühr"};
+        private string[] titleArray = new string[] { "Name", "Brutto", "Transaktionscode", "Währung", "Auswirkung auf Guthaben", "Typ", "Gebühr", "Datum", "Uhrzeit" };
         String fileLocation;
         PaypalParseCompletedCallBack callback;
-        int test = 0;
 
         public PayPalParser(string fileLocation, PaypalParseCompletedCallBack callback)
         {
@@ -84,7 +83,7 @@ namespace Reiner_Autoworker.WorkerClasses
                             string[] fields = parser.ReadFields();
                             if (!fields[dataPositions[2]].Equals(""))
                             {
-                                liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]]));
+                                liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]], fields[dataPositions[7]] + fields[dataPositions[8]]));
                             }
                         }
                         callback(liste, 0);
@@ -114,7 +113,6 @@ namespace Reiner_Autoworker.WorkerClasses
         private string[] titleArray = new string[] { "Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
         String fileLocation;
         EbayParseCompletedCallBack callback;
-        int test = 0;
 
         public ebayPPParser(string fileLocation, EbayParseCompletedCallBack callback)
         {
