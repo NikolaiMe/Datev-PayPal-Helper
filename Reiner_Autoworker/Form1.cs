@@ -11,6 +11,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Runtime.InteropServices;
 using Reiner_Autoworker.DataStructures;
 using Reiner_Autoworker.WorkerClasses;
+using System.Reflection;
 
 namespace Reiner_Autoworker
 {
@@ -51,6 +52,7 @@ namespace Reiner_Autoworker
                 }*/
                 Invoke(new Action(() => {
                     this.myTable.AutoGenerateColumns = false;
+                    this.myTable.DoubleBuffered(true);
                     this.myTable.AllowUserToAddRows = false;
                     this.myTable.DataSource = datenSatz;
 
@@ -250,4 +252,15 @@ namespace Reiner_Autoworker
 
     }
 
+}
+
+public static class ExtensionMethods
+{
+    public static void DoubleBuffered(this DataGridView dgv, bool setting)
+    {
+        Type dgvType = dgv.GetType();
+        PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        pi.SetValue(dgv, setting, null);
+    }
 }

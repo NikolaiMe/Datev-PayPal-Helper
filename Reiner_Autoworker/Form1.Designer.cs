@@ -35,12 +35,20 @@
             // 
             // myTable
             // 
+            this.myTable.AllowUserToAddRows = false;
+            this.myTable.AllowUserToDeleteRows = false;
+            this.myTable.AllowUserToResizeColumns = false;
+            this.myTable.AllowUserToResizeRows = false;
+            this.myTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.myTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.myTable.Location = new System.Drawing.Point(13, 82);
             this.myTable.Margin = new System.Windows.Forms.Padding(4);
+            this.myTable.MaximumSize = new System.Drawing.Size(2560, 1600);
             this.myTable.Name = "myTable";
-            this.myTable.Size = new System.Drawing.Size(650, 309);
+            this.myTable.ReadOnly = true;
+            this.myTable.Size = new System.Drawing.Size(650, 300);
             this.myTable.TabIndex = 0;
+            this.myTable.VirtualMode = true;
             // 
             // button1
             // 
