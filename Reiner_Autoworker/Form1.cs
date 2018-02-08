@@ -36,7 +36,7 @@ namespace Reiner_Autoworker
         {
             if(errorCode == 0)
             {
-                datenSatz = liste;
+                datenSatz = removeUnneccesarryRows(liste);
                /* DataColumn[] columns = new DataColumn[7];
                 for (int i = 0; i < 7; i++)
                 {
@@ -233,9 +233,21 @@ namespace Reiner_Autoworker
             SendKeys.SendWait("=");
         }
 
+        private List<payPalTransaction> removeUnneccesarryRows(List<payPalTransaction> list)
+        {
+            List<payPalTransaction> cleanList = new List<payPalTransaction>();
+            foreach (payPalTransaction trans in list)
+            {
+                if (!(trans.transType == TransTypes.MEMO))
+                {
+                    cleanList.Add(trans);
+                }
+            }
+
+
+            return cleanList;
+        }
+
     }
-
-    
-
 
 }
