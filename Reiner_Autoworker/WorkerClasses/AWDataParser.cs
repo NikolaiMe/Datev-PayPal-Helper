@@ -7,14 +7,15 @@ using System.Threading;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.VisualBasic;
 using Reiner_Autoworker.DataStructures;
+using System.Xml.Linq;
+
 
 namespace Reiner_Autoworker.WorkerClasses
 {
     public delegate void PaypalParseCompletedCallBack(List<payPalTransaction> transactionList, int errorCode);
     public delegate void EbayParseCompletedCallBack(List<ebayPPTransaction> ebayList, int errorCode);
-    
-
-
+    public delegate void OnlineShopParseCompletedCallBack(List<OnlineShopTransaction> onlineShopList, int errorCode);
+ 
 
 
     class PayPalParser
@@ -54,7 +55,7 @@ namespace Reiner_Autoworker.WorkerClasses
                     {
                         while (!titleArray[i].Equals(header[counter]))
                         {
-                            int test = String.Compare(titleArray[i], header[counter], false);
+                            //int test = String.Compare(titleArray[i], header[counter], false);
                             if (counter < size - 1)
                             {
                                 counter++;
@@ -203,6 +204,114 @@ namespace Reiner_Autoworker.WorkerClasses
 
             }
         }
+    }
+
+    class OnlineShopParser
+    {
+        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
+        private string[] titleArray = new string[] { "FirstName", "LastName", "GrandTotal", "Currency", "InvoiceNumber" };
+        String fileLocation;
+        OnlineShopParseCompletedCallBack callback;
+
+        public OnlineShopParser(string fileLocation, OnlineShopParseCompletedCallBack callback)
+        {
+            this.fileLocation = fileLocation;
+            this.callback = callback;
+        }
+
+        public void startParsing()
+        {
+            Thread parsingThread = new Thread(pOSParserThread);
+            parsingThread.Start();
+        }
+
+        public void pOSParserThread()
+        {
+            try
+            {
+                List<OnlineShopTransaction> liste = new List<OnlineShopTransaction>();
+                XDocument xDoc;
+                xDoc = XDocument.Load(fileLocation);
+
+                foreach (XElement invoice in xDoc.Descendants("Order"))
+                {
+                    int errorCode = 0;
+                    String fname;
+                    try
+                    {
+                        fname = invoice.Element("Addresses").Element("BillingAddress").Element("FirstName").Value;
+                    }
+                    catch
+                    {
+                        fname = "";
+                        errorCode |= 1;
+                    }
+
+                    String name;
+                    try
+                    {
+                        name = invoice.Element("Addresses").Element("BillingAddress").Element("LastName").Value;
+                    }
+                    catch
+                    {
+                        name = "";
+                        errorCode |= 2;
+                    }
+
+                    String sum;
+                    try
+                    {
+                        sum = invoice.Element("GrandTotal").Value;
+                    }
+                    catch
+                    {
+                        sum = "";
+                        errorCode |= 4;
+                    }
+
+                    String currency;
+                    try
+                    {
+                        currency = invoice.Element("Currency").Value;
+                    }
+                    catch
+                    {
+                        currency = "";
+                        errorCode |= 8;
+                    }
+
+                    String invoiceNr;
+                    try
+                    {
+                        invoiceNr = invoice.Element("OrderDocuments").Element("Invoices").Element("Invoice").Element("InvoiceNumber").Value;
+                    }
+                    catch
+                    {
+                        invoiceNr = "";
+                        errorCode |= 16;
+                    }
+
+                    String type;
+                    try
+                    {
+                        type = invoice.Element("LineItems").Element("LineItemPayment").Element("Id").Value;
+                    }
+                    catch
+                    {
+                        type = "";
+                        errorCode |= 32;
+                    }
+
+                    liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode));
+                }
+                callback(liste, 0);
+            }
+            catch
+            {
+                callback(new List<OnlineShopTransaction>(), DATA_ERROR);
+            }
+        }
+        
     }
 
 }

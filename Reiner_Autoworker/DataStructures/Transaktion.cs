@@ -49,7 +49,7 @@ namespace Reiner_Autoworker.DataStructures
 
     public class payPalTransaction : Transaction
     {
-        private String[] listOfCompanyIndicators = new  String[] { "GmbH", "AG", "GBR", "OHG", "KG", "eG", "se",  };
+        private String[] listOfCompanyIndicators = new  String[] { "GmbH", "AG", "GBR", "OHG", "KG", "eG", "se"};
         
         public string currency { get; private set; }                //The currency of the transaction
         public string transID { get; private set; }                 //The paypal identification number of the transaction
@@ -182,12 +182,31 @@ namespace Reiner_Autoworker.DataStructures
     public class ebayPPTransaction : Transaction
     {
         public string transID { get; private set; }                 //The paypal identification number of the transaction
-        public string invoiceNumber { get; set; }             //The invoice number --> To be filled with data from ebay/online shop
+        public string invoiceNumber { get; set; } = "";            //The invoice number --> To be filled with data from ebay/online shop
 
         public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber):base(name, sum)
         {
             this.transID = paypalTransactionCode;
             this.invoiceNumber = invoiceNumber;
+        }
+    }
+
+
+    public class OnlineShopTransaction : Transaction
+    {
+        public string invoiceNumber { get; private set; }
+        public string firstName { get; private set; }
+        public string currency { get; private set; }
+        public string type { get; private set; }
+        public int errorCode { get; private set; }
+
+        public OnlineShopTransaction(string name, string firstName, string sum, string invoiceNumber , string currency, string type, int errorCode) :base(name, sum)
+        {
+            this.invoiceNumber = invoiceNumber;
+            this.firstName = firstName;
+            this.currency = currency;
+            this.type = type;
+            this.errorCode = errorCode;
         }
     }
 }

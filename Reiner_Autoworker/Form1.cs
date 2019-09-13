@@ -116,7 +116,7 @@ namespace Reiner_Autoworker
                     {
                         if(payPal.transID.Equals(ebay.transID))
                         {
-                            payPal.invoiceNumber = ebay.invoiceNumber;
+                            payPal.invoiceNumber= ebay.invoiceNumber;
                         }
                     }
                 }
@@ -136,6 +136,11 @@ namespace Reiner_Autoworker
             }
         }
 
+        public void onlineShopParserCallback(List<OnlineShopTransaction> onlineShopList, int errorCode)
+        {
+
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -147,11 +152,18 @@ namespace Reiner_Autoworker
             EbayParseCompletedCallBack eCallback = ebayParserCallback;
             ebayPPParser eParser = new ebayPPParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv", eCallback);
             eParser.startParsing();
+
+            OnlineShopParseCompletedCallBack osCallback = onlineShopParserCallback;
+            OnlineShopParser osParser = new OnlineShopParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\onlineshop.xml", osCallback);
+            osParser.startParsing();
+
+
         }
 
         private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
 
-        private void parsData()
+        // Obsolet --> jetzt in AWDataParser
+       /* private void parsData()
         {
             using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
             {
@@ -187,7 +199,7 @@ namespace Reiner_Autoworker
                     MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nDie gewählte Datei scheint nicht korrekt formatiert zu sein. Bitte korrekte Paypal Datei auswählen!");
                 }
             }
-        }
+        }*/
 
 
 

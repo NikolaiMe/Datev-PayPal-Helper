@@ -45,7 +45,6 @@
             this.myTable.Margin = new System.Windows.Forms.Padding(4);
             this.myTable.MaximumSize = new System.Drawing.Size(2560, 1600);
             this.myTable.Name = "myTable";
-            this.myTable.ReadOnly = true;
             this.myTable.Size = new System.Drawing.Size(650, 300);
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
