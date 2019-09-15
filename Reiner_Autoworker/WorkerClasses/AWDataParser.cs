@@ -304,7 +304,7 @@ namespace Reiner_Autoworker.WorkerClasses
 
                     liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode));
                 }
-                callback(liste, 0);
+                callback(liste.Where(x => x.errorCode == 0).ToList(), 0);
             }
             catch
             {

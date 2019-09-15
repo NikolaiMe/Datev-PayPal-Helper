@@ -46,11 +46,12 @@ namespace Reiner_Autoworker.DataStructures
     }
     public enum TransTypes {SOLL, HABEN, MEMO, ERROR};
     public enum TransReasons {EBAY, ONLINESHOP, REPAYMENT, DEBIT, TRANSLATION, ERROR};
+    public enum InvoiceState {NO_DATA, SAFE, UNSURE_NAME, UNSURE_SUM, MULTIPLE};
 
     public class payPalTransaction : Transaction
     {
-        private String[] listOfCompanyIndicators = new  String[] { "GmbH", "AG", "GBR", "OHG", "KG", "eG", "se"};
-        
+        private String[] listOfCompanyIndicators = new String[] { "GmbH", "AG", "GBR", "OHG", "KG", "eG", "se" };
+
         public string currency { get; private set; }                //The currency of the transaction
         public string transID { get; private set; }                 //The paypal identification number of the transaction
         public TransTypes transType { get; private set; }               //The type of the transaction (soll, haben...)
@@ -60,10 +61,10 @@ namespace Reiner_Autoworker.DataStructures
         public string outputName { get; private set; }
         public DateTime date { get; private set; }
 
-        public bool noInvoiceFound { get; set; } = true;            //Must be set false if invoice number could be found
+        public InvoiceState invoiceNumberState { get; set; } = InvoiceState.NO_DATA;            //Must be set false if invoice number could be found
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
-
+        public List<OnlineShopTransaction> onlineShopUnsureList {get;set;}
 
         public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
@@ -128,10 +129,7 @@ namespace Reiner_Autoworker.DataStructures
             else
             {
                 this.outputName = customerName;
-            }
-
-            Console.WriteLine(outputName);
-            
+            }            
 
         }
 
@@ -196,6 +194,7 @@ namespace Reiner_Autoworker.DataStructures
     {
         public string invoiceNumber { get; private set; }
         public string firstName { get; private set; }
+        public string fullName { get; private set; }
         public string currency { get; private set; }
         public string type { get; private set; }
         public int errorCode { get; private set; }
@@ -207,6 +206,7 @@ namespace Reiner_Autoworker.DataStructures
             this.currency = currency;
             this.type = type;
             this.errorCode = errorCode;
+            this.fullName = firstName + @" " + name;
         }
     }
 }

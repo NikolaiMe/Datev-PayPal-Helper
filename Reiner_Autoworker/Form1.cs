@@ -99,6 +99,8 @@ namespace Reiner_Autoworker
                     this.myTable.Columns.Add(column7);
 
                 }));
+
+                getEbayData();
             }
             else
             {
@@ -108,25 +110,25 @@ namespace Reiner_Autoworker
 
         public void ebayParserCallback(List<ebayPPTransaction> ebayList, int errorCode)
         {
-            if(errorCode == 0)
+
+            var ebayPPTransactions = datenSatz.Where(trans => trans.transReason == TransReasons.EBAY);
+            if (errorCode == 0)
             {
-                foreach (payPalTransaction payPal in datenSatz)
+                foreach (payPalTransaction payPal in ebayPPTransactions)
                 {
                     foreach(ebayPPTransaction ebay in ebayList)
                     {
                         if(payPal.transID.Equals(ebay.transID))
                         {
                             payPal.invoiceNumber= ebay.invoiceNumber;
+                            payPal.invoiceNumberState = InvoiceState.SAFE;
                         }
                     }
                 }
 
-                Invoke(new Action(() =>
-                {
-                    myTable.DataSource = null;
-                    myTable.DataSource = datenSatz;
-                }
-                ));
+                refreshTable();
+
+                getOnlShopData();
 
             }
             else
@@ -136,28 +138,91 @@ namespace Reiner_Autoworker
             }
         }
 
+
+
         public void onlineShopParserCallback(List<OnlineShopTransaction> onlineShopList, int errorCode)
         {
+            var onlineShopPPTransactions = datenSatz.Where(trans => trans.transReason == TransReasons.ONLINESHOP);
 
+            foreach(payPalTransaction trans in onlineShopPPTransactions)
+            {
+                //Filtern nach Nachnamen
+                trans.onlineShopUnsureList = onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())).ToList();
+                if (trans.onlineShopUnsureList.Count() > 0)
+                {
+                    //Filtern nach Betrag
+                    var supportList = trans.onlineShopUnsureList.Where(osTrans => trans.sum == osTrans.sum);
+                    if(supportList.Count()==1) // Eindeutige Zuordnung erfolgt
+                    {
+                        trans.invoiceNumber = supportList.First().invoiceNumber;
+                        trans.invoiceNumberState = InvoiceState.SAFE;
+                        trans.onlineShopUnsureList = null;
+                    }
+                    else if(supportList.Count()>1) // Mehrere Möglichkeiten
+                    {
+                        trans.invoiceNumber = supportList.First().invoiceNumber;
+                        trans.invoiceNumberState = InvoiceState.MULTIPLE;
+                        trans.onlineShopUnsureList = supportList.ToList();
+                    }
+                    else // Keine passende Summe gefunden
+                    {
+                        trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                        trans.invoiceNumberState = InvoiceState.UNSURE_SUM;
+                    }
+                }
+                else // Kein Passender Name gefunden --> Nochmal suchen ob eine passende Summe existiert
+                {
+                    trans.onlineShopUnsureList = onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum).ToList();
+                    if(trans.onlineShopUnsureList.Count>0)
+                    {
+                        trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                        trans.invoiceNumberState = InvoiceState.UNSURE_NAME;
+                    }
+                }
+            }
+
+            refreshTable();
+        }
+
+
+        private void refreshTable()
+        {
+            Invoke(new Action(() =>
+            {
+                myTable.DataSource = null;
+                myTable.DataSource = datenSatz;
+            }
+            ));
         }
 
         public Form1()
         {
             InitializeComponent();
             //parsData();
+
+            getPayPalData();
+
+        }
+
+        private void getPayPalData()
+        {
             PaypalParseCompletedCallBack callback = payPalParserCallback;
             PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
             parser.startParsing();
+        }
 
+        private void getEbayData()
+        {
             EbayParseCompletedCallBack eCallback = ebayParserCallback;
             ebayPPParser eParser = new ebayPPParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv", eCallback);
             eParser.startParsing();
+        }
 
+        private void getOnlShopData()
+        {
             OnlineShopParseCompletedCallBack osCallback = onlineShopParserCallback;
             OnlineShopParser osParser = new OnlineShopParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\onlineshop.xml", osCallback);
             osParser.startParsing();
-
-
         }
 
         private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
