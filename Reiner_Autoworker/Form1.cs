@@ -27,7 +27,8 @@ namespace Reiner_Autoworker
             "Auswirkung auf Guthaben",
             "Ursprung",
             "Gebühr",
-            "Rechnungsnummer"
+            "Rechnungsnummer",
+            "Status der Rechnungsnummer"
         };
 
         private DataTable dataTable = new DataTable();
@@ -97,6 +98,12 @@ namespace Reiner_Autoworker
                     column7.HeaderText = tableTitles[6];
                     column7.DataPropertyName = "invoiceNumber";
                     this.myTable.Columns.Add(column7);
+
+                    DataGridViewTextBoxColumn column8 = new DataGridViewTextBoxColumn();
+                    column8.Name = "invoiceNumberState";
+                    column8.HeaderText = tableTitles[7];
+                    column8.DataPropertyName = "invoiceNumberState";
+                    this.myTable.Columns.Add(column8);
 
                 }));
 

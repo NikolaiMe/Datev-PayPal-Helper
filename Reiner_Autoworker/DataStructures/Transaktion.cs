@@ -64,7 +64,7 @@ namespace Reiner_Autoworker.DataStructures
         public InvoiceState invoiceNumberState { get; set; } = InvoiceState.NO_DATA;            //Must be set false if invoice number could be found
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
-        public List<OnlineShopTransaction> onlineShopUnsureList {get;set;}
+        public List<OnlineShopTransaction> onlineShopUnsureList {get;set;} // If there are several possibilities for onlineShop Invoices
 
         public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
@@ -198,8 +198,9 @@ namespace Reiner_Autoworker.DataStructures
         public string currency { get; private set; }
         public string type { get; private set; }
         public int errorCode { get; private set; }
+        public DateTime paidOn { get; private set; }
 
-        public OnlineShopTransaction(string name, string firstName, string sum, string invoiceNumber , string currency, string type, int errorCode) :base(name, sum)
+        public OnlineShopTransaction(string name, string firstName, string sum, string invoiceNumber , string currency, string type, int errorCode, string date) :base(name, sum)
         {
             this.invoiceNumber = invoiceNumber;
             this.firstName = firstName;
@@ -207,6 +208,14 @@ namespace Reiner_Autoworker.DataStructures
             this.type = type;
             this.errorCode = errorCode;
             this.fullName = firstName + @" " + name;
+            this.paidOn = convertDate(date);
+        }
+
+
+        private DateTime convertDate(string timeDate)
+        {
+            return DateTime.ParseExact(timeDate, "yyyy-MM-ddTHH:mm:ss",
+                                       System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

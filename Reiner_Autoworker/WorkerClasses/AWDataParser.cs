@@ -302,9 +302,20 @@ namespace Reiner_Autoworker.WorkerClasses
                         errorCode |= 32;
                     }
 
-                    liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode));
+                    String paidOn;
+                    try
+                    {
+                        paidOn = invoice.Element("PaidOn").Value;
+                    }
+                    catch
+                    {
+                        paidOn = "";
+                        errorCode |= 64;
+                    }
+
+                    liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode, paidOn));
                 }
-                callback(liste.Where(x => x.errorCode == 0).ToList(), 0);
+                callback(liste.Where(x => (x.errorCode & 16) == 0).ToList(), 0);
             }
             catch
             {
