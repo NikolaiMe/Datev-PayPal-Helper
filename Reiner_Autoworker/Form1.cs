@@ -18,8 +18,8 @@ namespace Reiner_Autoworker
     public partial class Form1 : Form
     {
 
+        //------------Variables ----------------------
         List<payPalTransaction> datenSatz;
-
         private string[] tableTitles = new string[] {
             "Name",
             "Umsatz",
@@ -30,88 +30,151 @@ namespace Reiner_Autoworker
             "Rechnungsnummer",
             "Status der Rechnungsnummer"
         };
+        private bool isPaypalAvailable = false;
+        private bool isDataTabelInitialized = false;
 
-        private DataTable dataTable = new DataTable();
+
+        // --------------------- Form Event Listener -------------------------------------
 
 
-        public void payPalParserCallback(List<payPalTransaction> liste, int errorCode)
+        public Form1()
         {
-            if(errorCode == 0)
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Control control = (Control)sender;
+            myTable.Size = new Size(control.Width - 40, control.Height - 170);
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            Control control = (Control)sender;
+            myTable.Size = new Size(control.Width - 40, control.Height - 170);
+
+        }
+
+        private void paypalButton_Click(object sender, EventArgs e)
+        {
+            isPaypalAvailable = false;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "PayPal Export csv|*.csv";
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                datenSatz = removeUnneccesarryRows(liste);
-               /* DataColumn[] columns = new DataColumn[7];
-                for (int i = 0; i < 7; i++)
+                getPayPalData(ofd.FileName);
+            }
+        }
+
+        private void ebayButton_Click(object sender, EventArgs e)
+        {
+            if (isPaypalAvailable)
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "ebay Export csv|*.csv";
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    columns[i] = new DataColumn(tableTitles[i]);
+                    getEbayData(ofd.FileName);
                 }
-                dataTable.Columns.AddRange(columns);
-
-                foreach(payPalTransaction trans in liste)
-                {
-                    string[] fields = new string[] { trans.customerName, trans.sum.ToString(), trans.currency.ToString(), trans.transType.ToString(), trans.transReason.ToString(), trans.fee.ToString() };
-                    dataTable.Rows.Add(fields);
-                }*/
-                Invoke(new Action(() => {
-                    this.myTable.AutoGenerateColumns = false;
-                    this.myTable.DoubleBuffered(true);
-                    this.myTable.AllowUserToAddRows = false;
-                    this.myTable.DataSource = datenSatz;
-
-                    DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
-                    column1.Name = "customerName";
-                    column1.HeaderText = tableTitles[0];
-                    column1.DataPropertyName = "customerName";
-                    this.myTable.Columns.Add(column1);
-
-                    DataGridViewTextBoxColumn column2 = new DataGridViewTextBoxColumn();
-                    column2.Name = "sum";
-                    column2.HeaderText = tableTitles[1];
-                    column2.DataPropertyName = "sum";
-                    this.myTable.Columns.Add(column2);
-
-                    DataGridViewTextBoxColumn column3 = new DataGridViewTextBoxColumn();
-                    column3.Name = "currency";
-                    column3.HeaderText = tableTitles[2];
-                    column3.DataPropertyName = "currency";
-                    this.myTable.Columns.Add(column3);
-
-                    DataGridViewTextBoxColumn column4 = new DataGridViewTextBoxColumn();
-                    column4.Name = "transType";
-                    column4.HeaderText = tableTitles[3];
-                    column4.DataPropertyName = "transType";
-                    this.myTable.Columns.Add(column4);
-
-                    DataGridViewTextBoxColumn column5 = new DataGridViewTextBoxColumn();
-                    column5.Name = "transReason";
-                    column5.HeaderText = tableTitles[4];
-                    column5.DataPropertyName = "transReason";
-                    this.myTable.Columns.Add(column5);
-
-                    DataGridViewTextBoxColumn column6 = new DataGridViewTextBoxColumn();
-                    column6.Name = "fee";
-                    column6.HeaderText = tableTitles[5];
-                    column6.DataPropertyName = "fee";
-                    this.myTable.Columns.Add(column6);
-
-                    DataGridViewTextBoxColumn column7 = new DataGridViewTextBoxColumn();
-                    column7.Name = "invoiceNumber";
-                    column7.HeaderText = tableTitles[6];
-                    column7.DataPropertyName = "invoiceNumber";
-                    this.myTable.Columns.Add(column7);
-
-                    DataGridViewTextBoxColumn column8 = new DataGridViewTextBoxColumn();
-                    column8.Name = "invoiceNumberState";
-                    column8.HeaderText = tableTitles[7];
-                    column8.DataPropertyName = "invoiceNumberState";
-                    this.myTable.Columns.Add(column8);
-
-                }));
-
-                getEbayData();
             }
             else
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode "+ errorCode.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "Bitte zuerst Paypal Daten laden");
+
+            }
+        }
+
+        private void onlineShopButton_Click(object sender, EventArgs e)
+        {
+            if (isPaypalAvailable)
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "Onlineshop Export xml|*.xml";
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    getOnlShopData(ofd.FileName);
+                }
+            }
+
+            else
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Bitte zuerst Paypal Daten laden");
+            }
+        }
+
+        // ---------------- Callbacks ----------------------------
+
+        public void payPalParserCallback(List<payPalTransaction> liste, int errorCode)
+        {
+            if (errorCode == 0)
+            {
+                datenSatz = removeUnneccesarryRows(liste);
+                if (!isDataTabelInitialized)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        this.myTable.AutoGenerateColumns = false;
+                        this.myTable.DoubleBuffered(true);
+                        this.myTable.AllowUserToAddRows = false;
+                        this.myTable.DataSource = datenSatz;
+
+                        DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
+                        column1.Name = "customerName";
+                        column1.HeaderText = tableTitles[0];
+                        column1.DataPropertyName = "customerName";
+                        this.myTable.Columns.Add(column1);
+
+                        DataGridViewTextBoxColumn column2 = new DataGridViewTextBoxColumn();
+                        column2.Name = "sum";
+                        column2.HeaderText = tableTitles[1];
+                        column2.DataPropertyName = "sum";
+                        this.myTable.Columns.Add(column2);
+
+                        DataGridViewTextBoxColumn column3 = new DataGridViewTextBoxColumn();
+                        column3.Name = "currency";
+                        column3.HeaderText = tableTitles[2];
+                        column3.DataPropertyName = "currency";
+                        this.myTable.Columns.Add(column3);
+
+                        DataGridViewTextBoxColumn column4 = new DataGridViewTextBoxColumn();
+                        column4.Name = "transType";
+                        column4.HeaderText = tableTitles[3];
+                        column4.DataPropertyName = "transType";
+                        this.myTable.Columns.Add(column4);
+
+                        DataGridViewTextBoxColumn column5 = new DataGridViewTextBoxColumn();
+                        column5.Name = "transReason";
+                        column5.HeaderText = tableTitles[4];
+                        column5.DataPropertyName = "transReason";
+                        this.myTable.Columns.Add(column5);
+
+                        DataGridViewTextBoxColumn column6 = new DataGridViewTextBoxColumn();
+                        column6.Name = "fee";
+                        column6.HeaderText = tableTitles[5];
+                        column6.DataPropertyName = "fee";
+                        this.myTable.Columns.Add(column6);
+
+                        DataGridViewTextBoxColumn column7 = new DataGridViewTextBoxColumn();
+                        column7.Name = "invoiceNumber";
+                        column7.HeaderText = tableTitles[6];
+                        column7.DataPropertyName = "invoiceNumber";
+                        this.myTable.Columns.Add(column7);
+
+                        DataGridViewTextBoxColumn column8 = new DataGridViewTextBoxColumn();
+                        column8.Name = "invoiceNumberState";
+                        column8.HeaderText = tableTitles[7];
+                        column8.DataPropertyName = "invoiceNumberState";
+                        this.myTable.Columns.Add(column8);
+                        isDataTabelInitialized = true;
+                    }));
+                    isDataTabelInitialized = true;
+                }
+                refreshTable();
+                isPaypalAvailable = true;
+            }
+            else
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode " + errorCode.ToString());
             }
         }
 
@@ -123,20 +186,17 @@ namespace Reiner_Autoworker
             {
                 foreach (payPalTransaction payPal in ebayPPTransactions)
                 {
-                    foreach(ebayPPTransaction ebay in ebayList)
+                    foreach (ebayPPTransaction ebay in ebayList)
                     {
-                        if(payPal.transID.Equals(ebay.transID))
+                        if (payPal.transID.Equals(ebay.transID))
                         {
-                            payPal.invoiceNumber= ebay.invoiceNumber;
+                            payPal.invoiceNumber = ebay.invoiceNumber;
                             payPal.invoiceNumberState = InvoiceState.SAFE;
                         }
                     }
                 }
 
                 refreshTable();
-
-                getOnlShopData();
-
             }
             else
             {
@@ -149,49 +209,59 @@ namespace Reiner_Autoworker
 
         public void onlineShopParserCallback(List<OnlineShopTransaction> onlineShopList, int errorCode)
         {
-            var onlineShopPPTransactions = datenSatz.Where(trans => trans.transReason == TransReasons.ONLINESHOP);
-
-            foreach(payPalTransaction trans in onlineShopPPTransactions)
+            if (errorCode == 0)
             {
-                //Filtern nach Nachnamen
-                trans.onlineShopUnsureList = onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())).ToList();
-                if (trans.onlineShopUnsureList.Count() > 0)
+                var onlineShopPPTransactions = datenSatz.Where(trans => trans.transReason == TransReasons.ONLINESHOP);
+
+                foreach (payPalTransaction trans in onlineShopPPTransactions)
                 {
-                    //Filtern nach Betrag
-                    var supportList = trans.onlineShopUnsureList.Where(osTrans => trans.sum == osTrans.sum);
-                    if(supportList.Count()==1) // Eindeutige Zuordnung erfolgt
+                    //Filtern nach Nachnamen
+                    trans.onlineShopUnsureList = onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())).ToList();
+                    if (trans.onlineShopUnsureList.Count() > 0)
                     {
-                        trans.invoiceNumber = supportList.First().invoiceNumber;
-                        trans.invoiceNumberState = InvoiceState.SAFE;
-                        trans.onlineShopUnsureList = null;
+                        //Filtern nach Betrag
+                        var supportList = trans.onlineShopUnsureList.Where(osTrans => trans.sum == osTrans.sum);
+                        if (supportList.Count() == 1) // Eindeutige Zuordnung erfolgt
+                        {
+                            trans.invoiceNumber = supportList.First().invoiceNumber;
+                            trans.invoiceNumberState = InvoiceState.SAFE;
+                            trans.onlineShopUnsureList = null;
+                        }
+                        else if (supportList.Count() > 1) // Mehrere Möglichkeiten
+                        {
+                            trans.invoiceNumber = supportList.First().invoiceNumber;
+                            trans.invoiceNumberState = InvoiceState.MULTIPLE;
+                            trans.onlineShopUnsureList = supportList.ToList();
+                        }
+                        else // Keine passende Summe gefunden
+                        {
+                            trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                            trans.invoiceNumberState = InvoiceState.UNSURE_SUM;
+                        }
                     }
-                    else if(supportList.Count()>1) // Mehrere Möglichkeiten
+                    else // Kein Passender Name gefunden --> Nochmal suchen ob eine passende Summe existiert
                     {
-                        trans.invoiceNumber = supportList.First().invoiceNumber;
-                        trans.invoiceNumberState = InvoiceState.MULTIPLE;
-                        trans.onlineShopUnsureList = supportList.ToList();
-                    }
-                    else // Keine passende Summe gefunden
-                    {
-                        trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
-                        trans.invoiceNumberState = InvoiceState.UNSURE_SUM;
+                        trans.onlineShopUnsureList = onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum).ToList();
+                        if (trans.onlineShopUnsureList.Count > 0)
+                        {
+                            trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                            trans.invoiceNumberState = InvoiceState.UNSURE_NAME;
+                        }
                     }
                 }
-                else // Kein Passender Name gefunden --> Nochmal suchen ob eine passende Summe existiert
-                {
-                    trans.onlineShopUnsureList = onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum).ToList();
-                    if(trans.onlineShopUnsureList.Count>0)
-                    {
-                        trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
-                        trans.invoiceNumberState = InvoiceState.UNSURE_NAME;
-                    }
-                }
+            }
+            else
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nFehlercode " + errorCode.ToString());
+
             }
 
             refreshTable();
         }
 
 
+
+        // -------------Helpful Functions --------------------
         private void refreshTable()
         {
             Invoke(new Action(() =>
@@ -202,91 +272,44 @@ namespace Reiner_Autoworker
             ));
         }
 
-        public Form1()
-        {
-            InitializeComponent();
-            //parsData();
-
-            getPayPalData();
-
-        }
-
-        private void getPayPalData()
+        private void getPayPalData(String fileLocation)
         {
             PaypalParseCompletedCallBack callback = payPalParserCallback;
-            PayPalParser parser = new PayPalParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\pp.csv", callback);
+            PayPalParser parser = new PayPalParser(fileLocation, callback);
             parser.startParsing();
         }
 
-        private void getEbayData()
+        private void getEbayData(String fileLocation)
         {
             EbayParseCompletedCallBack eCallback = ebayParserCallback;
-            ebayPPParser eParser = new ebayPPParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv", eCallback);
+            ebayPPParser eParser = new ebayPPParser(fileLocation, eCallback);
             eParser.startParsing();
         }
 
-        private void getOnlShopData()
+        private void getOnlShopData(String fileLocation)
         {
             OnlineShopParseCompletedCallBack osCallback = onlineShopParserCallback;
-            OnlineShopParser osParser = new OnlineShopParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\onlineshop.xml", osCallback);
+            OnlineShopParser osParser = new OnlineShopParser(fileLocation, osCallback);
             osParser.startParsing();
         }
 
-        private List<payPalTransaction> payPalDataStructure = new List<payPalTransaction>();
-
-        // Obsolet --> jetzt in AWDataParser
-       /* private void parsData()
+        private List<payPalTransaction> removeUnneccesarryRows(List<payPalTransaction> list)
         {
-            using (TextFieldParser parser = new TextFieldParser(@"C:\Users\nikol\Desktop\Reiner_Testdaten\ebay.csv"))
+            List<payPalTransaction> cleanList = new List<payPalTransaction>();
+            foreach (payPalTransaction trans in list)
             {
-                DataTable dataTable = new DataTable();
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(";");
-                try
+                if (!(trans.transType == TransTypes.MEMO))
                 {
-                    string[] header = parser.ReadFields();
-                    int size = header.Length;
-                    DataColumn[] columns = new DataColumn[size];
-                    for (int i = 0; i < size; i++)
-                    {
-                        columns[i] = new DataColumn(header[i]);
-                    }
-                    dataTable.Columns.AddRange(columns);
-
-                    while (!parser.EndOfData)
-                    {
-                        //Process row
-                        string[] fields = parser.ReadFields();
-                        dataTable.Rows.Add(fields);
-                        //foreach (string field in fields)
-                        //{
-                        //TODO: Process field
-                        //}
-                    }
-                    myTable.DataSource = dataTable;
-
-                }
-                catch
-                {
-                    MessageBox.Show(new Form() { TopMost = true }, "Ups, hier ist etwas schief gelaufen:\nDie gewählte Datei scheint nicht korrekt formatiert zu sein. Bitte korrekte Paypal Datei auswählen!");
+                    cleanList.Add(trans);
                 }
             }
-        }*/
 
 
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            return cleanList;
         }
 
-        private void Form1_SizeChanged(object sender, EventArgs e)
-        {
-            Control control = (Control)sender;
-            myTable.Size = new Size (control.Width-40,control.Height-120);
 
-        }
-
+        //---------- Write to Datev --> Shall be new class in future ------------
 
         // Get a handle to an application window.
         [DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
@@ -318,25 +341,17 @@ namespace Reiner_Autoworker
             SendKeys.SendWait("11");
             SendKeys.SendWait("=");
         }
-
-        private List<payPalTransaction> removeUnneccesarryRows(List<payPalTransaction> list)
-        {
-            List<payPalTransaction> cleanList = new List<payPalTransaction>();
-            foreach (payPalTransaction trans in list)
-            {
-                if (!(trans.transType == TransTypes.MEMO))
-                {
-                    cleanList.Add(trans);
-                }
-            }
-
-
-            return cleanList;
-        }
-
     }
 
+
+
+ 
+
+
 }
+
+
+// ---------------- Performance Improvements ----------------------------
 
 public static class ExtensionMethods
 {

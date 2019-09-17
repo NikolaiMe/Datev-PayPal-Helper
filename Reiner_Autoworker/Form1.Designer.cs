@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.myTable = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.ebayButton = new System.Windows.Forms.Button();
+            this.onlineShopButton = new System.Windows.Forms.Button();
+            this.paypalButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.myTable)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // myTable
@@ -44,17 +47,17 @@
             this.myTable.AllowUserToResizeRows = false;
             this.myTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.myTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.myTable.Location = new System.Drawing.Point(13, 82);
+            this.myTable.Location = new System.Drawing.Point(13, 119);
             this.myTable.Margin = new System.Windows.Forms.Padding(4);
             this.myTable.MaximumSize = new System.Drawing.Size(2560, 1600);
             this.myTable.Name = "myTable";
-            this.myTable.Size = new System.Drawing.Size(650, 300);
+            this.myTable.Size = new System.Drawing.Size(834, 404);
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(13, 12);
+            this.button1.Location = new System.Drawing.Point(639, 32);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -62,41 +65,63 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // ebayButton
             // 
-            this.button2.Location = new System.Drawing.Point(207, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Load";
-            this.button2.UseVisualStyleBackColor = true;
+            this.ebayButton.Image = ((System.Drawing.Image)(resources.GetObject("ebayButton.Image")));
+            this.ebayButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.ebayButton.Location = new System.Drawing.Point(122, 20);
+            this.ebayButton.Name = "ebayButton";
+            this.ebayButton.Size = new System.Drawing.Size(110, 63);
+            this.ebayButton.TabIndex = 4;
+            this.ebayButton.Text = "ebay";
+            this.ebayButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.ebayButton.UseVisualStyleBackColor = true;
+            this.ebayButton.Click += new System.EventHandler(this.ebayButton_Click);
             // 
-            // button3
+            // onlineShopButton
             // 
-            this.button3.Location = new System.Drawing.Point(288, 10);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(86, 25);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.onlineShopButton.Image = ((System.Drawing.Image)(resources.GetObject("onlineShopButton.Image")));
+            this.onlineShopButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.onlineShopButton.Location = new System.Drawing.Point(238, 20);
+            this.onlineShopButton.Name = "onlineShopButton";
+            this.onlineShopButton.Size = new System.Drawing.Size(110, 63);
+            this.onlineShopButton.TabIndex = 2;
+            this.onlineShopButton.Text = "Onlineshop";
+            this.onlineShopButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.onlineShopButton.UseVisualStyleBackColor = true;
+            this.onlineShopButton.Click += new System.EventHandler(this.onlineShopButton_Click);
             // 
-            // button4
+            // paypalButton
             // 
-            this.button4.Location = new System.Drawing.Point(380, 10);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
+            this.paypalButton.Image = ((System.Drawing.Image)(resources.GetObject("paypalButton.Image")));
+            this.paypalButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.paypalButton.Location = new System.Drawing.Point(6, 21);
+            this.paypalButton.Name = "paypalButton";
+            this.paypalButton.Size = new System.Drawing.Size(110, 62);
+            this.paypalButton.TabIndex = 3;
+            this.paypalButton.Text = "PayPal";
+            this.paypalButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.paypalButton.UseVisualStyleBackColor = true;
+            this.paypalButton.Click += new System.EventHandler(this.paypalButton_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.onlineShopButton);
+            this.groupBox1.Controls.Add(this.ebayButton);
+            this.groupBox1.Controls.Add(this.paypalButton);
+            this.groupBox1.Location = new System.Drawing.Point(13, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(353, 100);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Daten Laden";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 404);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(860, 536);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.myTable);
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -105,6 +130,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.myTable)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -113,9 +139,10 @@
 
         private System.Windows.Forms.DataGridView myTable;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button ebayButton;
+        private System.Windows.Forms.Button paypalButton;
+        private System.Windows.Forms.Button onlineShopButton;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

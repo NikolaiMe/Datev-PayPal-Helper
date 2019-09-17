@@ -15,12 +15,12 @@ namespace Reiner_Autoworker.WorkerClasses
     public delegate void PaypalParseCompletedCallBack(List<payPalTransaction> transactionList, int errorCode);
     public delegate void EbayParseCompletedCallBack(List<ebayPPTransaction> ebayList, int errorCode);
     public delegate void OnlineShopParseCompletedCallBack(List<OnlineShopTransaction> onlineShopList, int errorCode);
- 
+
 
 
     class PayPalParser
     {
-        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
+        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3 ;
         private string[] titleArray = new string[] { "Name", "Brutto", "Transaktionscode", "Währung", "Auswirkung auf Guthaben", "Typ", "Gebühr", "Datum", "Uhrzeit" };
         String fileLocation;
         PaypalParseCompletedCallBack callback;
@@ -41,76 +41,84 @@ namespace Reiner_Autoworker.WorkerClasses
         {
             List<payPalTransaction> liste = new List<payPalTransaction>();
             bool dataNotFound = false;
-            using (TextFieldParser parser = new TextFieldParser(fileLocation))
+            try
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
-               // try
+                using (TextFieldParser parser = new TextFieldParser(fileLocation))
                 {
-                    string[] header = parser.ReadFields();
-                    int[] dataPositions = new int[titleArray.Length];
-                    int size = header.Length;
-                    int counter = 0;
-                    for (int i = 0; i < titleArray.Length; i++)
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(",");
+                    try
                     {
-                        while (!titleArray[i].Equals(header[counter]))
+                        string[] header = parser.ReadFields();
+                        int[] dataPositions = new int[titleArray.Length];
+                        int size = header.Length;
+                        int counter = 0;
+                        for (int i = 0; i < titleArray.Length; i++)
                         {
-                            //int test = String.Compare(titleArray[i], header[counter], false);
-                            if (counter < size - 1)
+                            while (!titleArray[i].Equals(header[counter]))
                             {
-                                counter++;
+                                //int test = String.Compare(titleArray[i], header[counter], false);
+                                if (counter < size - 1)
+                                {
+                                    counter++;
+                                }
+                                else
+                                {
+                                    dataNotFound = true;
+                                    break;
+                                }
+                            }
+                            if (!dataNotFound)
+                            {
+                                dataPositions[i] = counter;
+                                counter = 0;
                             }
                             else
                             {
-                                dataNotFound = true;
                                 break;
                             }
                         }
                         if (!dataNotFound)
                         {
-                            dataPositions[i] = counter;
-                            counter = 0;
+                            while (!parser.EndOfData)
+                            {
+                                //Process row
+                                string[] fields = parser.ReadFields();
+                                if (!fields[dataPositions[2]].Equals(""))
+                                {
+                                    liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]], fields[dataPositions[7]] + fields[dataPositions[8]]));
+                                }
+                            }
+                            callback(liste, 0);
+
+
                         }
                         else
                         {
-                            break;
+                            callback(liste, DATA_NOT_FOUND_ERROR);
                         }
                     }
-                    if (!dataNotFound)
+                    catch
                     {
-                        while (!parser.EndOfData)
-                        {
-                            //Process row
-                            string[] fields = parser.ReadFields();
-                            if (!fields[dataPositions[2]].Equals(""))
-                            {
-                                liste.Add(new payPalTransaction(fields[dataPositions[0]], fields[dataPositions[1]], fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]], fields[dataPositions[5]], fields[dataPositions[6]], fields[dataPositions[7]] + fields[dataPositions[8]]));
-                            }
-                        }
-                        callback(liste, 0);
-
-
-                    }
-                    else
-                    {
-                        callback(liste, DATA_NOT_FOUND_ERROR);
+                        callback(liste, DATA_ERROR);
                     }
                 }
-                /*catch
-                {
-                    callback(liste, DATA_ERROR);
-                }*/
+            }
+            catch
+            {
+                callback(liste, FILE_NOT_FOUND_ERROR);
+            }
             
             
         }
-        }
+        
     }
 
 
 
     class ebayPPParser
     {
-        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
+        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3;
         private string[] titleArray = new string[] { "Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
         String fileLocation;
         EbayParseCompletedCallBack callback;
@@ -142,73 +150,78 @@ namespace Reiner_Autoworker.WorkerClasses
         public void pEbayPPThread()
         {
             List<ebayPPTransaction> liste = new List<ebayPPTransaction>();
-            bool dataNotFound = false;
-            using (TextFieldParser parser = new TextFieldParser(fileLocation))
+            try
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(";");
-                // try
+                bool dataNotFound = false;
+                using (TextFieldParser parser = new TextFieldParser(fileLocation))
                 {
-                    string[] header = parser.ReadFields();
-                    int[] dataPositions = new int[titleArray.Length];
-                    int size = header.Length;
-                    int counter = 0;
-                    for (int i = 0; i < titleArray.Length; i++)
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(";");
+                    try
                     {
-                        while (!titleArray[i].Equals(header[counter]))
+                        string[] header = parser.ReadFields();
+                        int[] dataPositions = new int[titleArray.Length];
+                        int size = header.Length;
+                        int counter = 0;
+                        for (int i = 0; i < titleArray.Length; i++)
                         {
-                            int test = String.Compare(titleArray[i], header[counter], false);
-                            if (counter < size - 1)
+                            while (!titleArray[i].Equals(header[counter]))
                             {
-                                counter++;
+                                int test = String.Compare(titleArray[i], header[counter], false);
+                                if (counter < size - 1)
+                                {
+                                    counter++;
+                                }
+                                else
+                                {
+                                    dataNotFound = true;
+                                    break;
+                                }
+                            }
+                            if (!dataNotFound)
+                            {
+                                dataPositions[i] = counter;
+                                counter = 0;
                             }
                             else
                             {
-                                dataNotFound = true;
                                 break;
                             }
                         }
                         if (!dataNotFound)
                         {
-                            dataPositions[i] = counter;
-                            counter = 0;
+                            while (!parser.EndOfData)
+                            {
+                                //Process row
+                                string[] fields = parser.ReadFields();
+                                liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]]));
+                            }
+
+                            callback(liste, 0);
+
+
                         }
                         else
                         {
-                            break;
+                            callback(liste, DATA_NOT_FOUND_ERROR);
                         }
                     }
-                    if (!dataNotFound)
+                    catch
                     {
-                        while (!parser.EndOfData)
-                        {
-                            //Process row
-                            string[] fields = parser.ReadFields();
-                            liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]]));
-                        }
-
-                        callback(liste, 0);
-
-
-                    }
-                    else
-                    {
-                        callback(liste, DATA_NOT_FOUND_ERROR);
+                        callback(liste, DATA_ERROR);
                     }
                 }
-                /*catch
-                {
-                    callback(liste, DATA_ERROR);
-                }*/
-
-
+            }
+            catch
+            {
+                callback(liste, FILE_NOT_FOUND_ERROR);
             }
         }
     }
 
     class OnlineShopParser
     {
-        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2;
+        public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3;
         private string[] titleArray = new string[] { "FirstName", "LastName", "GrandTotal", "Currency", "InvoiceNumber" };
         String fileLocation;
         OnlineShopParseCompletedCallBack callback;
@@ -227,99 +240,107 @@ namespace Reiner_Autoworker.WorkerClasses
 
         public void pOSParserThread()
         {
+            
+                List<OnlineShopTransaction> liste = new List<OnlineShopTransaction>();
             try
             {
-                List<OnlineShopTransaction> liste = new List<OnlineShopTransaction>();
                 XDocument xDoc;
                 xDoc = XDocument.Load(fileLocation);
-
-                foreach (XElement invoice in xDoc.Descendants("Order"))
+                try
                 {
-                    int errorCode = 0;
-                    String fname;
-                    try
-                    {
-                        fname = invoice.Element("Addresses").Element("BillingAddress").Element("FirstName").Value;
-                    }
-                    catch
-                    {
-                        fname = "";
-                        errorCode |= 1;
-                    }
 
-                    String name;
-                    try
+                    foreach (XElement invoice in xDoc.Descendants("Order"))
                     {
-                        name = invoice.Element("Addresses").Element("BillingAddress").Element("LastName").Value;
-                    }
-                    catch
-                    {
-                        name = "";
-                        errorCode |= 2;
-                    }
+                        int errorCode = 0;
+                        String fname;
+                        try
+                        {
+                            fname = invoice.Element("Addresses").Element("BillingAddress").Element("FirstName").Value;
+                        }
+                        catch
+                        {
+                            fname = "";
+                            errorCode |= 1;
+                        }
 
-                    String sum;
-                    try
-                    {
-                        sum = invoice.Element("GrandTotal").Value;
-                    }
-                    catch
-                    {
-                        sum = "";
-                        errorCode |= 4;
-                    }
+                        String name;
+                        try
+                        {
+                            name = invoice.Element("Addresses").Element("BillingAddress").Element("LastName").Value;
+                        }
+                        catch
+                        {
+                            name = "";
+                            errorCode |= 2;
+                        }
 
-                    String currency;
-                    try
-                    {
-                        currency = invoice.Element("Currency").Value;
-                    }
-                    catch
-                    {
-                        currency = "";
-                        errorCode |= 8;
-                    }
+                        String sum;
+                        try
+                        {
+                            sum = invoice.Element("GrandTotal").Value;
+                        }
+                        catch
+                        {
+                            sum = "";
+                            errorCode |= 4;
+                        }
 
-                    String invoiceNr;
-                    try
-                    {
-                        invoiceNr = invoice.Element("OrderDocuments").Element("Invoices").Element("Invoice").Element("InvoiceNumber").Value;
-                    }
-                    catch
-                    {
-                        invoiceNr = "";
-                        errorCode |= 16;
-                    }
+                        String currency;
+                        try
+                        {
+                            currency = invoice.Element("Currency").Value;
+                        }
+                        catch
+                        {
+                            currency = "";
+                            errorCode |= 8;
+                        }
 
-                    String type;
-                    try
-                    {
-                        type = invoice.Element("LineItems").Element("LineItemPayment").Element("Id").Value;
-                    }
-                    catch
-                    {
-                        type = "";
-                        errorCode |= 32;
-                    }
+                        String invoiceNr;
+                        try
+                        {
+                            invoiceNr = invoice.Element("OrderDocuments").Element("Invoices").Element("Invoice").Element("InvoiceNumber").Value;
+                        }
+                        catch
+                        {
+                            invoiceNr = "";
+                            errorCode |= 16;
+                        }
 
-                    String paidOn;
-                    try
-                    {
-                        paidOn = invoice.Element("PaidOn").Value;
-                    }
-                    catch
-                    {
-                        paidOn = "";
-                        errorCode |= 64;
-                    }
+                        String type;
+                        try
+                        {
+                            type = invoice.Element("LineItems").Element("LineItemPayment").Element("Id").Value;
+                        }
+                        catch
+                        {
+                            type = "";
+                            errorCode |= 32;
+                        }
 
-                    liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode, paidOn));
+                        String paidOn;
+                        try
+                        {
+                            paidOn = invoice.Element("PaidOn").Value;
+                        }
+                        catch
+                        {
+                            paidOn = "";
+                            errorCode |= 64;
+                        }
+
+                        liste.Add(new OnlineShopTransaction(name, fname, sum, invoiceNr, currency, type, errorCode, paidOn));
+                    }
+                    callback(liste.Where(x => (x.errorCode & 16) == 0).ToList(), 0);
                 }
-                callback(liste.Where(x => (x.errorCode & 16) == 0).ToList(), 0);
+                catch
+                {
+                    callback(new List<OnlineShopTransaction>(), DATA_ERROR);
+                }
             }
             catch
             {
-                callback(new List<OnlineShopTransaction>(), DATA_ERROR);
+                callback(liste, FILE_NOT_FOUND_ERROR);
             }
         }
         
