@@ -84,6 +84,57 @@ namespace Reiner_Autoworker
             }
         }
 
+        private void myTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Get a handle to the Calculator application. The window class
+            // and window name were obtained using the Spy++ tool.
+            IntPtr windowHandler = FindWindow(null, "Unbenannt - Editor");
+
+            // Verify that Calculator is a running process.
+            if (windowHandler == IntPtr.Zero)
+            {
+                MessageBox.Show("Éditor läuft nicht");
+                return;
+            }
+
+            // Make Calculator the foreground application and send it 
+            // a set of calculations.
+
+            foreach(payPalTransaction trans in datenSatz)
+            {
+                SetForegroundWindow(windowHandler);
+                SendKeys.SendWait(trans.sum.ToString());
+                if (trans.transType == TransTypes.HABEN)
+                {
+                    SendKeys.SendWait("\t\t");
+                }
+                else
+                {
+                    SendKeys.SendWait("\t{+}\t");
+                }
+                SendKeys.SendWait("Gegenkonto");
+                SendKeys.SendWait("\t");
+                SendKeys.SendWait(trans.invoiceNumber);
+                SendKeys.SendWait("\t");
+                SendKeys.SendWait(trans.date.ToString("dd.MM."));
+                SendKeys.SendWait("\t");
+                SendKeys.SendWait("Konto");
+                SendKeys.SendWait("\t");
+                SendKeys.SendWait(trans.outputName);
+                SendKeys.SendWait("\n");
+
+
+
+
+            }
+
+        }
+
         private void onlineShopButton_Click(object sender, EventArgs e)
         {
             if (isPaypalAvailable)
@@ -120,6 +171,7 @@ namespace Reiner_Autoworker
 
                         DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
                         column1.Name = "customerName";
+                        column1.ReadOnly = true;
                         column1.HeaderText = tableTitles[0];
                         column1.DataPropertyName = "customerName";
                         this.myTable.Columns.Add(column1);
@@ -156,14 +208,16 @@ namespace Reiner_Autoworker
 
                         DataGridViewTextBoxColumn column7 = new DataGridViewTextBoxColumn();
                         column7.Name = "invoiceNumber";
+                        column7.ReadOnly = true;
                         column7.HeaderText = tableTitles[6];
                         column7.DataPropertyName = "invoiceNumber";
                         this.myTable.Columns.Add(column7);
 
-                        DataGridViewTextBoxColumn column8 = new DataGridViewTextBoxColumn();
+                        DataGridViewImageColumn column8 = new DataGridViewImageColumn();
                         column8.Name = "invoiceNumberState";
-                        column8.HeaderText = tableTitles[7];
-                        column8.DataPropertyName = "invoiceNumberState";
+                        column8.ReadOnly = true;
+                        column8.HeaderText = " ";
+                        column8.DataPropertyName = "hint_image";
                         this.myTable.Columns.Add(column8);
                         isDataTabelInitialized = true;
                     }));
@@ -319,28 +373,6 @@ namespace Reiner_Autoworker
         // Activate an application window.
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // Get a handle to the Calculator application. The window class
-            // and window name were obtained using the Spy++ tool.
-            IntPtr calculatorHandle = FindWindow(null, "Unbenannt - Editor");
-
-            // Verify that Calculator is a running process.
-            if (calculatorHandle == IntPtr.Zero)
-            {
-                MessageBox.Show("Calculator is not running.");
-                return;
-            }
-
-            // Make Calculator the foreground application and send it 
-            // a set of calculations.
-            SetForegroundWindow(calculatorHandle);
-            SendKeys.SendWait("111");
-            SendKeys.SendWait("*");
-            SendKeys.SendWait("11");
-            SendKeys.SendWait("=");
-        }
     }
 
 

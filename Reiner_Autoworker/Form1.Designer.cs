@@ -54,14 +54,18 @@
             this.myTable.Size = new System.Drawing.Size(834, 404);
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
+            this.myTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellClick);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(639, 32);
+            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button1.Location = new System.Drawing.Point(386, 33);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(124, 62);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Eintragen";
+            this.button1.Text = "Export";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 

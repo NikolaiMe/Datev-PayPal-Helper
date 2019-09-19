@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Reiner_Autoworker.DataStructures
 {
@@ -60,6 +61,22 @@ namespace Reiner_Autoworker.DataStructures
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
         public DateTime date { get; private set; }
+        public Bitmap hint_image
+        {
+            get
+            {
+                switch (this.invoiceNumberState)
+                {
+                    case InvoiceState.NO_DATA:
+                        return (Bitmap) new Bitmap(Properties.Resources.NO_DATA, new Size(15,15));
+                    case InvoiceState.SAFE:
+                        return (Bitmap)new Bitmap(Properties.Resources.ALL_GOOD, new Size(15, 15));
+                    default:
+                        return (Bitmap)new Bitmap(Properties.Resources.WARNING, new Size(16, 15));
+                }
+            }
+        }
+
 
         public InvoiceState invoiceNumberState { get; set; } = InvoiceState.NO_DATA;            //Must be set false if invoice number could be found
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
