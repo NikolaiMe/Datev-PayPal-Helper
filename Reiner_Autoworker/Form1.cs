@@ -52,7 +52,6 @@ namespace Reiner_Autoworker
         {
             Control control = (Control)sender;
             myTable.Size = new Size(control.Width - 40, control.Height - 170);
-
         }
 
         private void paypalButton_Click(object sender, EventArgs e)
@@ -98,7 +97,7 @@ namespace Reiner_Autoworker
             // Verify that Calculator is a running process.
             if (windowHandler == IntPtr.Zero)
             {
-                MessageBox.Show("Éditor läuft nicht");
+                MessageBox.Show("Editor läuft nicht");
                 return;
             }
 

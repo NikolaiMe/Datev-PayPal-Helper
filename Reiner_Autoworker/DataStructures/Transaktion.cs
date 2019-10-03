@@ -231,8 +231,13 @@ namespace Reiner_Autoworker.DataStructures
 
         private DateTime convertDate(string timeDate)
         {
-            return DateTime.ParseExact(timeDate, "yyyy-MM-ddTHH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture);
+            if ((this.errorCode & 64) == 0)
+            {
+                return DateTime.ParseExact(timeDate, "yyyy-MM-ddTHH:mm:ss",
+                                           System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+                return new DateTime();
         }
     }
 }

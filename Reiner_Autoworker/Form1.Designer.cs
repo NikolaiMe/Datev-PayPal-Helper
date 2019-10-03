@@ -35,6 +35,7 @@
             this.onlineShopButton = new System.Windows.Forms.Button();
             this.paypalButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             ((System.ComponentModel.ISupportInitialize)(this.myTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +52,7 @@
             this.myTable.Margin = new System.Windows.Forms.Padding(4);
             this.myTable.MaximumSize = new System.Drawing.Size(2560, 1600);
             this.myTable.Name = "myTable";
-            this.myTable.Size = new System.Drawing.Size(834, 404);
+            this.myTable.Size = new System.Drawing.Size(819, 404);
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
             this.myTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellClick);
@@ -62,7 +63,7 @@
             this.button1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.button1.Location = new System.Drawing.Point(386, 33);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 62);
+            this.button1.Size = new System.Drawing.Size(166, 73);
             this.button1.TabIndex = 1;
             this.button1.Text = "Export";
             this.button1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -75,7 +76,7 @@
             this.ebayButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.ebayButton.Location = new System.Drawing.Point(122, 20);
             this.ebayButton.Name = "ebayButton";
-            this.ebayButton.Size = new System.Drawing.Size(110, 63);
+            this.ebayButton.Size = new System.Drawing.Size(110, 74);
             this.ebayButton.TabIndex = 4;
             this.ebayButton.Text = "ebay";
             this.ebayButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -88,7 +89,7 @@
             this.onlineShopButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.onlineShopButton.Location = new System.Drawing.Point(238, 20);
             this.onlineShopButton.Name = "onlineShopButton";
-            this.onlineShopButton.Size = new System.Drawing.Size(110, 63);
+            this.onlineShopButton.Size = new System.Drawing.Size(110, 74);
             this.onlineShopButton.TabIndex = 2;
             this.onlineShopButton.Text = "Onlineshop";
             this.onlineShopButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -101,7 +102,7 @@
             this.paypalButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.paypalButton.Location = new System.Drawing.Point(6, 21);
             this.paypalButton.Name = "paypalButton";
-            this.paypalButton.Size = new System.Drawing.Size(110, 62);
+            this.paypalButton.Size = new System.Drawing.Size(110, 73);
             this.paypalButton.TabIndex = 3;
             this.paypalButton.Text = "PayPal";
             this.paypalButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -120,11 +121,20 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Daten Laden";
             // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 536);
+            this.splitter1.TabIndex = 7;
+            this.splitter1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(860, 536);
+            this.ClientSize = new System.Drawing.Size(1283, 536);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.myTable);
@@ -147,6 +157,7 @@
         private System.Windows.Forms.Button paypalButton;
         private System.Windows.Forms.Button onlineShopButton;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }
 

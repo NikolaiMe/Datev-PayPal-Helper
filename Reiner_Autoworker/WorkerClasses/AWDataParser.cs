@@ -119,7 +119,9 @@ namespace Reiner_Autoworker.WorkerClasses
     class ebayPPParser
     {
         public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3;
-        private string[] titleArray = new string[] { "Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
+        private string[] titleArrayEN = new string[] {"Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
+        private string[] titleArrayDE = new string[] {"Vollständiger Name des Käufers", "Gesamtpreis", "PayPal Transaktions-ID", "Rechnungsnummer"};
+        // TODO: Deutsche Titel einfügen
         String fileLocation;
         EbayParseCompletedCallBack callback;
 
@@ -153,21 +155,22 @@ namespace Reiner_Autoworker.WorkerClasses
             try
             {
                 bool dataNotFound = false;
-                using (TextFieldParser parser = new TextFieldParser(fileLocation))
+                using (TextFieldParser parser = new TextFieldParser(fileLocation,Encoding.GetEncoding(1250))) // Interpreting the Data with ANSI Coding
                 {
                     parser.TextFieldType = FieldType.Delimited;
                     parser.SetDelimiters(";");
                     try
                     {
                         string[] header = parser.ReadFields();
-                        int[] dataPositions = new int[titleArray.Length];
+                        int[] dataPositions = new int[titleArrayEN.Length];
                         int size = header.Length;
                         int counter = 0;
-                        for (int i = 0; i < titleArray.Length; i++)
+                        for (int i = 0; i < titleArrayEN.Length; i++)
                         {
-                            while (!titleArray[i].Equals(header[counter]))
+                            while (!(titleArrayEN[i].Equals(header[counter]) || titleArrayDE[i].Equals(header[counter])))
                             {
-                                int test = String.Compare(titleArray[i], header[counter], false);
+                                string debug = titleArrayDE[i];
+                                string debug2 = header[counter];
                                 if (counter < size - 1)
                                 {
                                     counter++;
