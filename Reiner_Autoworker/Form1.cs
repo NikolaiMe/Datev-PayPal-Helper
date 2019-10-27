@@ -33,6 +33,8 @@ namespace Reiner_Autoworker
         private bool isPaypalAvailable = false;
         private bool isDataTabelInitialized = false;
 
+        private const int invoice_ComboBox_Y_POS = 320;
+
 
         // --------------------- Form Event Listener -------------------------------------
 
@@ -45,13 +47,24 @@ namespace Reiner_Autoworker
         private void Form1_Load(object sender, EventArgs e)
         {
             Control control = (Control)sender;
-            myTable.Size = new Size(control.Width - 40, control.Height - 170);
+            myTable.Size = new Size(control.Width - 300, control.Height - 170);
+            invoice_ComboBox.Size = new Size(220, 24);
+            addInvoiceNr_btn.Size = new Size(21, 21);
+
+            invoice_ComboBox.Location = new Point(control.Width - 280, invoice_ComboBox_Y_POS);
+            addInvoiceNr_btn.Location = new Point(control.Width - 47, invoice_ComboBox_Y_POS);
+
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             Control control = (Control)sender;
-            myTable.Size = new Size(control.Width - 40, control.Height - 170);
+
+            myTable.Size = new Size(control.Width - 300, control.Height - 170);
+            invoice_ComboBox.Location = new Point(control.Width - 280, invoice_ComboBox_Y_POS);
+            addInvoiceNr_btn.Location = new Point(control.Width - 47, invoice_ComboBox_Y_POS);
+
+
         }
 
         private void paypalButton_Click(object sender, EventArgs e)
@@ -83,8 +96,13 @@ namespace Reiner_Autoworker
             }
         }
 
+        //todo unsureList richtig implementieren
+
         private void myTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            int rowNumber = e.RowIndex;
+            invoice_ComboBox.DataSource = datenSatz[e.RowIndex].invoiceList.Select(trans => trans.invoiceNumber).ToList(); // MEMO:    if(invoiceList[i] is ebayPPTransaction
+
 
         }
 
@@ -126,10 +144,6 @@ namespace Reiner_Autoworker
                 SendKeys.SendWait("\t");
                 SendKeys.SendWait(trans.outputName);
                 SendKeys.SendWait("\n");
-
-
-
-
             }
 
         }
@@ -244,6 +258,7 @@ namespace Reiner_Autoworker
                         if (payPal.transID.Equals(ebay.transID))
                         {
                             payPal.invoiceNumber = ebay.invoiceNumber;
+                            payPal.invoiceList.Add(ebay);
                             payPal.invoiceNumberState = InvoiceState.SAFE;
                         }
                     }
@@ -269,35 +284,36 @@ namespace Reiner_Autoworker
                 foreach (payPalTransaction trans in onlineShopPPTransactions)
                 {
                     //Filtern nach Nachnamen
-                    trans.onlineShopUnsureList = onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())).ToList();
-                    if (trans.onlineShopUnsureList.Count() > 0)
+                    trans.invoiceList = new List<Transaction>(onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())));
+                    if (trans.invoiceList.Count() > 0)
                     {
                         //Filtern nach Betrag
-                        var supportList = trans.onlineShopUnsureList.Where(osTrans => trans.sum == osTrans.sum);
+                        var supportList = trans.invoiceList.Where(osTrans => trans.sum == osTrans.sum);
                         if (supportList.Count() == 1) // Eindeutige Zuordnung erfolgt
                         {
                             trans.invoiceNumber = supportList.First().invoiceNumber;
                             trans.invoiceNumberState = InvoiceState.SAFE;
-                            trans.onlineShopUnsureList = null;
+                            trans.invoiceList = supportList.ToList();
                         }
+                        // TODO Filtern nach Datum
                         else if (supportList.Count() > 1) // Mehrere Möglichkeiten
                         {
                             trans.invoiceNumber = supportList.First().invoiceNumber;
                             trans.invoiceNumberState = InvoiceState.MULTIPLE;
-                            trans.onlineShopUnsureList = supportList.ToList();
+                            trans.invoiceList = supportList.ToList();
                         }
                         else // Keine passende Summe gefunden
                         {
-                            trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                            trans.invoiceNumber = trans.invoiceList.First().invoiceNumber;
                             trans.invoiceNumberState = InvoiceState.UNSURE_SUM;
                         }
                     }
                     else // Kein Passender Name gefunden --> Nochmal suchen ob eine passende Summe existiert
                     {
-                        trans.onlineShopUnsureList = onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum).ToList();
-                        if (trans.onlineShopUnsureList.Count > 0)
+                        trans.invoiceList = new List<Transaction>(onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum));
+                        if (trans.invoiceList.Count > 0)
                         {
-                            trans.invoiceNumber = trans.onlineShopUnsureList.First().invoiceNumber;
+                            trans.invoiceNumber = trans.invoiceList.First().invoiceNumber;
                             trans.invoiceNumberState = InvoiceState.UNSURE_NAME;
                         }
                     }
@@ -372,6 +388,11 @@ namespace Reiner_Autoworker
         // Activate an application window.
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void myTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 
 

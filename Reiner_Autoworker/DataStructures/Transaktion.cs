@@ -12,7 +12,8 @@ namespace Reiner_Autoworker.DataStructures
     {
         public string customerName { get; protected set; }        //Customer Name
         public float sum { get; private set; }                  //How much money 
-        
+        public string invoiceNumber { get; set; } = "";             //The invoice number --> To be filled with data from ebay/online shop
+
 
         public Transaction(string customerName, string sum)
         {
@@ -57,7 +58,6 @@ namespace Reiner_Autoworker.DataStructures
         public string transID { get; private set; }                 //The paypal identification number of the transaction
         public TransTypes transType { get; private set; }               //The type of the transaction (soll, haben...)
         public TransReasons transReason { get; private set; }             //The source of the transaction (ebay, online shop)
-        public string invoiceNumber { get; set; } = "";             //The invoice number --> To be filled with data from ebay/online shop
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
         public DateTime date { get; private set; }
@@ -76,12 +76,10 @@ namespace Reiner_Autoworker.DataStructures
                 }
             }
         }
-
-
         public InvoiceState invoiceNumberState { get; set; } = InvoiceState.NO_DATA;            //Must be set false if invoice number could be found
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
-        public List<OnlineShopTransaction> onlineShopUnsureList {get;set;} // If there are several possibilities for onlineShop Invoices
+        public List<Transaction> invoiceList {get;set;} // If there are several possibilities for Invoices
 
         public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
@@ -90,6 +88,8 @@ namespace Reiner_Autoworker.DataStructures
             this.currency = currency;
             if (currency != "EUR") foreignCurrencyFound = true;
             this.date = convertDate(timeDate);
+
+            this.invoiceList = new List<Transaction>();
 
             switch(transType)
             {
@@ -197,7 +197,6 @@ namespace Reiner_Autoworker.DataStructures
     public class ebayPPTransaction : Transaction
     {
         public string transID { get; private set; }                 //The paypal identification number of the transaction
-        public string invoiceNumber { get; set; } = "";            //The invoice number --> To be filled with data from ebay/online shop
 
         public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber):base(name, sum)
         {
@@ -209,7 +208,6 @@ namespace Reiner_Autoworker.DataStructures
 
     public class OnlineShopTransaction : Transaction
     {
-        public string invoiceNumber { get; private set; }
         public string firstName { get; private set; }
         public string fullName { get; private set; }
         public string currency { get; private set; }

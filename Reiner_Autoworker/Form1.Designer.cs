@@ -36,6 +36,8 @@
             this.paypalButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
+            this.invoice_ComboBox = new System.Windows.Forms.ComboBox();
+            this.addInvoiceNr_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.myTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +58,7 @@
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
             this.myTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellClick);
+            this.myTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellContentClick);
             // 
             // button1
             // 
@@ -129,16 +132,36 @@
             this.splitter1.TabIndex = 7;
             this.splitter1.TabStop = false;
             // 
+            // invoice_ComboBox
+            // 
+            this.invoice_ComboBox.FormattingEnabled = true;
+            this.invoice_ComboBox.Location = new System.Drawing.Point(839, 499);
+            this.invoice_ComboBox.Name = "invoice_ComboBox";
+            this.invoice_ComboBox.Size = new System.Drawing.Size(250, 24);
+            this.invoice_ComboBox.TabIndex = 8;
+            // 
+            // addInvoiceNr_btn
+            // 
+            this.addInvoiceNr_btn.Location = new System.Drawing.Point(1095, 499);
+            this.addInvoiceNr_btn.Name = "addInvoiceNr_btn";
+            this.addInvoiceNr_btn.Size = new System.Drawing.Size(24, 24);
+            this.addInvoiceNr_btn.TabIndex = 9;
+            this.addInvoiceNr_btn.Text = "+";
+            this.addInvoiceNr_btn.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1283, 536);
+            this.Controls.Add(this.addInvoiceNr_btn);
+            this.Controls.Add(this.invoice_ComboBox);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.myTable);
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(900, 500);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -158,6 +181,8 @@
         private System.Windows.Forms.Button onlineShopButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.ComboBox invoice_ComboBox;
+        private System.Windows.Forms.Button addInvoiceNr_btn;
     }
 }
 
