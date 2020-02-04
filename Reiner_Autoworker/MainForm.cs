@@ -15,7 +15,7 @@ using System.Reflection;
 
 namespace Reiner_Autoworker
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
 
         //------------Variables ----------------------
@@ -28,18 +28,35 @@ namespace Reiner_Autoworker
             "Ursprung",
             "Gebühr",
             "Rechnungsnummer",
+            "Kontonr.",
+            "GG Kontonr.",
             "Status der Rechnungsnummer"
         };
         private bool isPaypalAvailable = false;
         private bool isDataTabelInitialized = false;
 
-        private const int invoice_ComboBox_Y_POS = 320;
+        private const int XPOS_LEFT = 280;
+        private const int XPOS_TAB1 = 200;
+
+        private const int CB_INVOICE_YPOS = 320;
+        private const int LB_INVOICE_YPOS = 300;
+        private const int LB_GGACCOUNT_YPOS = 270;
+        private const int LB_ACCOUNT_YPOS = 240;
+        private const int LB_FEE_YPOS = 200;
+        private const int LB_DATE_YPOS = 180;
+        private const int LB_SUM_YPOS = 160;
+        private const int LB_CUSTOMER_YPOS = 140;
+        private const int LB_TITLE_YPOS = 100;
+
+
+
+        private int selectedRowNumber = -1;
 
 
         // --------------------- Form Event Listener -------------------------------------
 
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -48,11 +65,26 @@ namespace Reiner_Autoworker
         {
             Control control = (Control)sender;
             myTable.Size = new Size(control.Width - 300, control.Height - 170);
-            invoice_ComboBox.Size = new Size(220, 24);
-            addInvoiceNr_btn.Size = new Size(21, 21);
+            cb_invoice.Size = new Size(220, 24);
+            btn_addinvoice.Size = new Size(21, 21);
 
-            invoice_ComboBox.Location = new Point(control.Width - 280, invoice_ComboBox_Y_POS);
-            addInvoiceNr_btn.Location = new Point(control.Width - 47, invoice_ComboBox_Y_POS);
+            cb_invoice.Location = new Point(control.Width - XPOS_LEFT, CB_INVOICE_YPOS);
+            btn_addinvoice.Location = new Point(control.Width - 55, CB_INVOICE_YPOS);
+            lb_fx_invoice.Location =new Point(control.Width - XPOS_LEFT, LB_INVOICE_YPOS);
+            lb_fx_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_YPOS);
+            lb_fx_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_YPOS);
+            lb_fx_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_YPOS);
+            lb_fx_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_YPOS);
+            lb_fx_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_YPOS);
+            lb_fx_account.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_YPOS);
+            lb_fx_ggaccount.Location = new Point(control.Width - XPOS_LEFT, LB_GGACCOUNT_YPOS);
+
+            lb_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_YPOS);
+            lb_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_YPOS);
+            lb_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_YPOS);
+            lb_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_YPOS);
+            tb_account.Location = new Point(control.Width - XPOS_TAB1, LB_ACCOUNT_YPOS);
+            tb_ggaccount.Location = new Point(control.Width - XPOS_TAB1, LB_GGACCOUNT_YPOS);
 
         }
 
@@ -61,10 +93,23 @@ namespace Reiner_Autoworker
             Control control = (Control)sender;
 
             myTable.Size = new Size(control.Width - 300, control.Height - 170);
-            invoice_ComboBox.Location = new Point(control.Width - 280, invoice_ComboBox_Y_POS);
-            addInvoiceNr_btn.Location = new Point(control.Width - 47, invoice_ComboBox_Y_POS);
+            cb_invoice.Location = new Point(control.Width - XPOS_LEFT, CB_INVOICE_YPOS);
+            btn_addinvoice.Location = new Point(control.Width - 55, CB_INVOICE_YPOS);
+            lb_fx_invoice.Location = new Point(control.Width - XPOS_LEFT, LB_INVOICE_YPOS);
+            lb_fx_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_YPOS);
+            lb_fx_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_YPOS);
+            lb_fx_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_YPOS);
+            lb_fx_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_YPOS);
+            lb_fx_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_YPOS);
+            lb_fx_account.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_YPOS);
+            lb_fx_ggaccount.Location = new Point(control.Width - XPOS_LEFT, LB_GGACCOUNT_YPOS);
 
-
+            lb_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_YPOS);
+            lb_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_YPOS);
+            lb_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_YPOS);
+            lb_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_YPOS);
+            tb_account.Location = new Point(control.Width - XPOS_TAB1, LB_ACCOUNT_YPOS);
+            tb_ggaccount.Location = new Point(control.Width - XPOS_TAB1, LB_GGACCOUNT_YPOS);
         }
 
         private void paypalButton_Click(object sender, EventArgs e)
@@ -100,10 +145,29 @@ namespace Reiner_Autoworker
 
         private void myTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int rowNumber = e.RowIndex;
-            invoice_ComboBox.DataSource = datenSatz[e.RowIndex].invoiceList.Select(trans => trans.invoiceNumber).ToList(); // MEMO:    if(invoiceList[i] is ebayPPTransaction
+            selectedRowNumber = e.RowIndex;
+            cb_invoice.DataSource = datenSatz[e.RowIndex].invoiceList.Select(trans => trans.invoiceNumber).ToList(); // MEMO:    if(invoiceList[i] is ebayPPTransaction
 
 
+        }
+
+        private void addInvoiceNr_btn_Click(object sender, EventArgs e)
+        {
+            if(selectedRowNumber != -1)
+            {
+                AddInvoiceForm invoiceForm = new AddInvoiceForm(datenSatz[selectedRowNumber]);
+                DialogResult dialogresult = invoiceForm.ShowDialog();
+                if (dialogresult == DialogResult.OK)
+                {
+                    Console.WriteLine(invoiceForm.invoiceNr);
+                }
+                else if (dialogresult == DialogResult.Cancel)
+                {
+                    Console.WriteLine("You clicked either Cancel or X button in the top right corner");
+                }
+                invoiceForm.Dispose();
+
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -226,12 +290,26 @@ namespace Reiner_Autoworker
                         column7.DataPropertyName = "invoiceNumber";
                         this.myTable.Columns.Add(column7);
 
-                        DataGridViewImageColumn column8 = new DataGridViewImageColumn();
-                        column8.Name = "invoiceNumberState";
+                        DataGridViewTextBoxColumn column8 = new DataGridViewTextBoxColumn();
+                        column8.Name = "accountNr";
                         column8.ReadOnly = true;
-                        column8.HeaderText = " ";
-                        column8.DataPropertyName = "hint_image";
+                        column8.HeaderText = tableTitles[7];
+                        column8.DataPropertyName = "accountNr";
                         this.myTable.Columns.Add(column8);
+
+                        DataGridViewTextBoxColumn column9 = new DataGridViewTextBoxColumn();
+                        column9.Name = "ggAccountNr";
+                        column9.ReadOnly = true;
+                        column9.HeaderText = tableTitles[8];
+                        column9.DataPropertyName = "ggAccountNr";
+                        this.myTable.Columns.Add(column9);
+
+                        DataGridViewImageColumn column10 = new DataGridViewImageColumn();
+                        column10.Name = "invoiceNumberState";
+                        column10.ReadOnly = true;
+                        column10.HeaderText = " ";
+                        column10.DataPropertyName = "hint_image";
+                        this.myTable.Columns.Add(column10);
                         isDataTabelInitialized = true;
                     }));
                     isDataTabelInitialized = true;
@@ -345,6 +423,7 @@ namespace Reiner_Autoworker
         {
             PaypalParseCompletedCallBack callback = payPalParserCallback;
             PayPalParser parser = new PayPalParser(fileLocation, callback);
+            selectedRowNumber = -1;
             parser.startParsing();
         }
 

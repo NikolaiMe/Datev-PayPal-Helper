@@ -61,6 +61,8 @@ namespace Reiner_Autoworker.DataStructures
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
         public DateTime date { get; private set; }
+        public string accountNr { get; set; } = "";
+        public string ggAccountNr { get; set; } = "";
         public Bitmap hint_image
         {
             get
