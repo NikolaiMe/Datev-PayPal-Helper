@@ -143,12 +143,39 @@ namespace Reiner_Autoworker
 
         //todo unsureList richtig implementieren
 
-        private void myTable_CellClick(object sender, DataGridViewCellEventArgs e)
+
+        private void myTable_SelectionChanged(object sender, EventArgs e)
         {
-            selectedRowNumber = e.RowIndex;
-            cb_invoice.DataSource = datenSatz[e.RowIndex].invoiceList.Select(trans => trans.invoiceNumber).ToList(); // MEMO:    if(invoiceList[i] is ebayPPTransaction
+            DataGridView view = (DataGridView)sender;
+            selectedRowNumber = view.CurrentCell.RowIndex;
+
+            cb_invoice.ResetText();
+            if (selectedRowNumber >= 0)
+            {
+                List<string> invoiceNumberList = datenSatz[selectedRowNumber].invoiceList.Select(trans => trans.invoiceNumber).ToList(); // MEMO:    if(invoiceList[i] is ebayPPTransaction
+                cb_invoice.DataSource = invoiceNumberList;
+                if (invoiceNumberList.Count > 0)
+                {
+                    cb_invoice.SelectedIndex = datenSatz[selectedRowNumber].invoiceIndex;
+                }
+
+                lb_customer.Text = datenSatz[selectedRowNumber].customerName;
+                lb_sum.Text = datenSatz[selectedRowNumber].sum.ToString() + " " + datenSatz[selectedRowNumber].currency;
+                lb_fee.Text = datenSatz[selectedRowNumber].fee.ToString() + " " + datenSatz[selectedRowNumber].currency;
+                lb_date.Text = datenSatz[selectedRowNumber].date.ToString("dd.MM.yyyy - HH:mm")+" Uhr";
+             }
+        }
 
 
+        private void cb_invoice_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+         }
+
+        private void cb_invoice_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            datenSatz[selectedRowNumber].invoiceIndex = cb_invoice.SelectedIndex;
+            datenSatz[selectedRowNumber].invoiceNumber = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].invoiceNumber;
+            refreshTable();
         }
 
         private void addInvoiceNr_btn_Click(object sender, EventArgs e)
@@ -160,6 +187,12 @@ namespace Reiner_Autoworker
                 if (dialogresult == DialogResult.OK)
                 {
                     Console.WriteLine(invoiceForm.invoiceNr);
+                    Transaction addTrans = new Transaction(datenSatz[selectedRowNumber].customerName, datenSatz[selectedRowNumber].sum.ToString());
+                    addTrans.invoiceNumber = invoiceForm.invoiceNr;
+                    datenSatz[selectedRowNumber].invoiceList.Add(addTrans);
+                    datenSatz[selectedRowNumber].invoiceNumber = addTrans.invoiceNumber;
+                    datenSatz[selectedRowNumber].invoiceIndex = datenSatz[selectedRowNumber].invoiceList.Count - 1;
+                    refreshTable();
                 }
                 else if (dialogresult == DialogResult.Cancel)
                 {
@@ -468,10 +501,7 @@ namespace Reiner_Autoworker
         [DllImport("USER32.DLL")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        private void myTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
     }
 
 

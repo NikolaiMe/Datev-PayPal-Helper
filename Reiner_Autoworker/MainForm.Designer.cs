@@ -71,8 +71,7 @@
             this.myTable.Size = new System.Drawing.Size(819, 404);
             this.myTable.TabIndex = 0;
             this.myTable.VirtualMode = true;
-            this.myTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellClick);
-            this.myTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTable_CellContentClick);
+            this.myTable.SelectionChanged += new System.EventHandler(this.myTable_SelectionChanged);
             // 
             // button1
             // 
@@ -153,6 +152,8 @@
             this.cb_invoice.Name = "cb_invoice";
             this.cb_invoice.Size = new System.Drawing.Size(250, 24);
             this.cb_invoice.TabIndex = 8;
+            this.cb_invoice.SelectedIndexChanged += new System.EventHandler(this.cb_invoice_SelectedIndexChanged_1);
+            this.cb_invoice.SelectionChangeCommitted += new System.EventHandler(this.cb_invoice_SelectionChangeCommitted);
             // 
             // btn_addinvoice
             // 

@@ -13,7 +13,7 @@ namespace Reiner_Autoworker.DataStructures
         public string customerName { get; protected set; }        //Customer Name
         public float sum { get; private set; }                  //How much money 
         public string invoiceNumber { get; set; } = "";             //The invoice number --> To be filled with data from ebay/online shop
-
+        public DateTime date { get; set; }
 
         public Transaction(string customerName, string sum)
         {
@@ -60,7 +60,6 @@ namespace Reiner_Autoworker.DataStructures
         public TransReasons transReason { get; private set; }             //The source of the transaction (ebay, online shop)
         public float fee { get; private set; } = 0.0F;
         public string outputName { get; private set; }
-        public DateTime date { get; private set; }
         public string accountNr { get; set; } = "";
         public string ggAccountNr { get; set; } = "";
         public Bitmap hint_image
@@ -82,6 +81,7 @@ namespace Reiner_Autoworker.DataStructures
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
         public List<Transaction> invoiceList {get;set;} // If there are several possibilities for Invoices
+        public int invoiceIndex { get; set; } = 0;
 
         public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
@@ -200,10 +200,25 @@ namespace Reiner_Autoworker.DataStructures
     {
         public string transID { get; private set; }                 //The paypal identification number of the transaction
 
-        public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber):base(name, sum)
+        public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber, string paidOn):base(name, sum)
         {
             this.transID = paypalTransactionCode;
             this.invoiceNumber = invoiceNumber;
+            this.date = convertDate(paidOn);
+        }
+
+        private DateTime convertDate(string timeDate)
+        {
+            if (timeDate != "")
+            {
+                string date = timeDate.Substring(0, 6) + "20" + timeDate.Substring(6, 2);
+                return DateTime.ParseExact(date, "dd.MM.yyyy",
+                                           System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                return new DateTime();
+            }
         }
     }
 
@@ -215,7 +230,6 @@ namespace Reiner_Autoworker.DataStructures
         public string currency { get; private set; }
         public string type { get; private set; }
         public int errorCode { get; private set; }
-        public DateTime paidOn { get; private set; }
 
         public OnlineShopTransaction(string name, string firstName, string sum, string invoiceNumber , string currency, string type, int errorCode, string date) :base(name, sum)
         {
@@ -225,7 +239,7 @@ namespace Reiner_Autoworker.DataStructures
             this.type = type;
             this.errorCode = errorCode;
             this.fullName = firstName + @" " + name;
-            this.paidOn = convertDate(date);
+            this.date = convertDate(date);
         }
 
 

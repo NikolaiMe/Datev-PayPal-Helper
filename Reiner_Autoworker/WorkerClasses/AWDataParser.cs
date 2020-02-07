@@ -119,9 +119,8 @@ namespace Reiner_Autoworker.WorkerClasses
     class ebayPPParser
     {
         public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3;
-        private string[] titleArrayEN = new string[] {"Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number"};
-        private string[] titleArrayDE = new string[] {"Vollständiger Name des Käufers", "Gesamtpreis", "PayPal Transaktions-ID", "Rechnungsnummer"};
-        // TODO: Deutsche Titel einfügen
+        private string[] titleArrayEN = new string[] {"Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number", "Paid on Date" };
+        private string[] titleArrayDE = new string[] {"Vollständiger Name des Käufers", "Gesamtpreis", "PayPal Transaktions-ID", "Rechnungsnummer","Bezahlt am"};
         String fileLocation;
         EbayParseCompletedCallBack callback;
 
@@ -197,7 +196,7 @@ namespace Reiner_Autoworker.WorkerClasses
                             {
                                 //Process row
                                 string[] fields = parser.ReadFields();
-                                liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]]));
+                                liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]]));
                             }
 
                             callback(liste, 0);
@@ -208,7 +207,7 @@ namespace Reiner_Autoworker.WorkerClasses
                         {
                             callback(liste, DATA_NOT_FOUND_ERROR);
                         }
-                    }
+                   }
                     catch
                     {
                         callback(liste, DATA_ERROR);
