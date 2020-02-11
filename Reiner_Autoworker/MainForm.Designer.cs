@@ -38,20 +38,28 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.cb_invoice = new System.Windows.Forms.ComboBox();
             this.btn_addinvoice = new System.Windows.Forms.Button();
-            this.lb_fx_title = new System.Windows.Forms.Label();
-            this.lb_fx_customer = new System.Windows.Forms.Label();
-            this.lb_fx_sum = new System.Windows.Forms.Label();
-            this.lb_fx_date = new System.Windows.Forms.Label();
+            this.lb_fx_pp_title = new System.Windows.Forms.Label();
+            this.lb_fx_pp_customer = new System.Windows.Forms.Label();
+            this.lb_fx_pp_sum = new System.Windows.Forms.Label();
+            this.lb_fx_pp_date = new System.Windows.Forms.Label();
             this.lb_fx_ggaccount = new System.Windows.Forms.Label();
             this.lb_fx_account = new System.Windows.Forms.Label();
-            this.lb_fx_fee = new System.Windows.Forms.Label();
+            this.lb_fx_pp_fee = new System.Windows.Forms.Label();
             this.lb_fx_invoice = new System.Windows.Forms.Label();
             this.tb_account = new System.Windows.Forms.TextBox();
             this.tb_ggaccount = new System.Windows.Forms.TextBox();
-            this.lb_customer = new System.Windows.Forms.Label();
-            this.lb_fee = new System.Windows.Forms.Label();
-            this.lb_date = new System.Windows.Forms.Label();
-            this.lb_sum = new System.Windows.Forms.Label();
+            this.lb_pp_customer = new System.Windows.Forms.Label();
+            this.lb_pp_fee = new System.Windows.Forms.Label();
+            this.lb_pp_date = new System.Windows.Forms.Label();
+            this.lb_pp_sum = new System.Windows.Forms.Label();
+            this.lb_re_sum = new System.Windows.Forms.Label();
+            this.lb_re_date = new System.Windows.Forms.Label();
+            this.lb_re_customer = new System.Windows.Forms.Label();
+            this.lb_fx_re_date = new System.Windows.Forms.Label();
+            this.lb_fx_re_sum = new System.Windows.Forms.Label();
+            this.lb_fx_re_customer = new System.Windows.Forms.Label();
+            this.lb_fx_re_title = new System.Windows.Forms.Label();
+            this.lb_fx_account_title = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.myTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -141,7 +149,7 @@
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 536);
+            this.splitter1.Size = new System.Drawing.Size(3, 680);
             this.splitter1.TabIndex = 7;
             this.splitter1.TabStop = false;
             // 
@@ -165,45 +173,45 @@
             this.btn_addinvoice.UseVisualStyleBackColor = true;
             this.btn_addinvoice.Click += new System.EventHandler(this.addInvoiceNr_btn_Click);
             // 
-            // lb_fx_title
+            // lb_fx_pp_title
             // 
-            this.lb_fx_title.AutoSize = true;
-            this.lb_fx_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_fx_title.Location = new System.Drawing.Point(840, 119);
-            this.lb_fx_title.Name = "lb_fx_title";
-            this.lb_fx_title.Size = new System.Drawing.Size(250, 25);
-            this.lb_fx_title.TabIndex = 10;
-            this.lb_fx_title.Text = "Rechnungsinformationen";
+            this.lb_fx_pp_title.AutoSize = true;
+            this.lb_fx_pp_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_pp_title.Location = new System.Drawing.Point(840, 119);
+            this.lb_fx_pp_title.Name = "lb_fx_pp_title";
+            this.lb_fx_pp_title.Size = new System.Drawing.Size(274, 25);
+            this.lb_fx_pp_title.TabIndex = 10;
+            this.lb_fx_pp_title.Text = "Transaktions Informationen";
             // 
-            // lb_fx_customer
+            // lb_fx_pp_customer
             // 
-            this.lb_fx_customer.AutoSize = true;
-            this.lb_fx_customer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_fx_customer.Location = new System.Drawing.Point(842, 160);
-            this.lb_fx_customer.Name = "lb_fx_customer";
-            this.lb_fx_customer.Size = new System.Drawing.Size(59, 17);
-            this.lb_fx_customer.TabIndex = 11;
-            this.lb_fx_customer.Text = "Kunde:";
+            this.lb_fx_pp_customer.AutoSize = true;
+            this.lb_fx_pp_customer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_pp_customer.Location = new System.Drawing.Point(842, 160);
+            this.lb_fx_pp_customer.Name = "lb_fx_pp_customer";
+            this.lb_fx_pp_customer.Size = new System.Drawing.Size(59, 17);
+            this.lb_fx_pp_customer.TabIndex = 11;
+            this.lb_fx_pp_customer.Text = "Kunde:";
             // 
-            // lb_fx_sum
+            // lb_fx_pp_sum
             // 
-            this.lb_fx_sum.AutoSize = true;
-            this.lb_fx_sum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_fx_sum.Location = new System.Drawing.Point(842, 190);
-            this.lb_fx_sum.Name = "lb_fx_sum";
-            this.lb_fx_sum.Size = new System.Drawing.Size(61, 17);
-            this.lb_fx_sum.TabIndex = 12;
-            this.lb_fx_sum.Text = "Betrag:";
+            this.lb_fx_pp_sum.AutoSize = true;
+            this.lb_fx_pp_sum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_pp_sum.Location = new System.Drawing.Point(842, 190);
+            this.lb_fx_pp_sum.Name = "lb_fx_pp_sum";
+            this.lb_fx_pp_sum.Size = new System.Drawing.Size(61, 17);
+            this.lb_fx_pp_sum.TabIndex = 12;
+            this.lb_fx_pp_sum.Text = "Betrag:";
             // 
-            // lb_fx_date
+            // lb_fx_pp_date
             // 
-            this.lb_fx_date.AutoSize = true;
-            this.lb_fx_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_fx_date.Location = new System.Drawing.Point(842, 219);
-            this.lb_fx_date.Name = "lb_fx_date";
-            this.lb_fx_date.Size = new System.Drawing.Size(59, 17);
-            this.lb_fx_date.TabIndex = 13;
-            this.lb_fx_date.Text = "Datum:";
+            this.lb_fx_pp_date.AutoSize = true;
+            this.lb_fx_pp_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_pp_date.Location = new System.Drawing.Point(842, 219);
+            this.lb_fx_pp_date.Name = "lb_fx_pp_date";
+            this.lb_fx_pp_date.Size = new System.Drawing.Size(59, 17);
+            this.lb_fx_pp_date.TabIndex = 13;
+            this.lb_fx_pp_date.Text = "Datum:";
             // 
             // lb_fx_ggaccount
             // 
@@ -225,15 +233,15 @@
             this.lb_fx_account.TabIndex = 15;
             this.lb_fx_account.Text = "Konto:";
             // 
-            // lb_fx_fee
+            // lb_fx_pp_fee
             // 
-            this.lb_fx_fee.AutoSize = true;
-            this.lb_fx_fee.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_fx_fee.Location = new System.Drawing.Point(842, 249);
-            this.lb_fx_fee.Name = "lb_fx_fee";
-            this.lb_fx_fee.Size = new System.Drawing.Size(67, 17);
-            this.lb_fx_fee.TabIndex = 16;
-            this.lb_fx_fee.Text = "Gebühr:";
+            this.lb_fx_pp_fee.AutoSize = true;
+            this.lb_fx_pp_fee.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_pp_fee.Location = new System.Drawing.Point(842, 249);
+            this.lb_fx_pp_fee.Name = "lb_fx_pp_fee";
+            this.lb_fx_pp_fee.Size = new System.Drawing.Size(67, 17);
+            this.lb_fx_pp_fee.TabIndex = 16;
+            this.lb_fx_pp_fee.Text = "Gebühr:";
             // 
             // lb_fx_invoice
             // 
@@ -259,57 +267,139 @@
             this.tb_ggaccount.Size = new System.Drawing.Size(100, 22);
             this.tb_ggaccount.TabIndex = 19;
             // 
-            // lb_customer
+            // lb_pp_customer
             // 
-            this.lb_customer.AutoSize = true;
-            this.lb_customer.Location = new System.Drawing.Point(925, 160);
-            this.lb_customer.Name = "lb_customer";
-            this.lb_customer.Size = new System.Drawing.Size(0, 17);
-            this.lb_customer.TabIndex = 20;
+            this.lb_pp_customer.AutoSize = true;
+            this.lb_pp_customer.Location = new System.Drawing.Point(925, 160);
+            this.lb_pp_customer.Name = "lb_pp_customer";
+            this.lb_pp_customer.Size = new System.Drawing.Size(0, 17);
+            this.lb_pp_customer.TabIndex = 20;
             // 
-            // lb_fee
+            // lb_pp_fee
             // 
-            this.lb_fee.AutoSize = true;
-            this.lb_fee.Location = new System.Drawing.Point(925, 249);
-            this.lb_fee.Name = "lb_fee";
-            this.lb_fee.Size = new System.Drawing.Size(0, 17);
-            this.lb_fee.TabIndex = 21;
+            this.lb_pp_fee.AutoSize = true;
+            this.lb_pp_fee.Location = new System.Drawing.Point(925, 249);
+            this.lb_pp_fee.Name = "lb_pp_fee";
+            this.lb_pp_fee.Size = new System.Drawing.Size(0, 17);
+            this.lb_pp_fee.TabIndex = 21;
             // 
-            // lb_date
+            // lb_pp_date
             // 
-            this.lb_date.AutoSize = true;
-            this.lb_date.Location = new System.Drawing.Point(925, 219);
-            this.lb_date.Name = "lb_date";
-            this.lb_date.Size = new System.Drawing.Size(0, 17);
-            this.lb_date.TabIndex = 22;
+            this.lb_pp_date.AutoSize = true;
+            this.lb_pp_date.Location = new System.Drawing.Point(925, 219);
+            this.lb_pp_date.Name = "lb_pp_date";
+            this.lb_pp_date.Size = new System.Drawing.Size(0, 17);
+            this.lb_pp_date.TabIndex = 22;
             // 
-            // lb_sum
+            // lb_pp_sum
             // 
-            this.lb_sum.AutoSize = true;
-            this.lb_sum.Location = new System.Drawing.Point(925, 190);
-            this.lb_sum.Name = "lb_sum";
-            this.lb_sum.Size = new System.Drawing.Size(0, 17);
-            this.lb_sum.TabIndex = 23;
+            this.lb_pp_sum.AutoSize = true;
+            this.lb_pp_sum.Location = new System.Drawing.Point(925, 190);
+            this.lb_pp_sum.Name = "lb_pp_sum";
+            this.lb_pp_sum.Size = new System.Drawing.Size(0, 17);
+            this.lb_pp_sum.TabIndex = 23;
+            // 
+            // lb_re_sum
+            // 
+            this.lb_re_sum.AutoSize = true;
+            this.lb_re_sum.Location = new System.Drawing.Point(925, 557);
+            this.lb_re_sum.Name = "lb_re_sum";
+            this.lb_re_sum.Size = new System.Drawing.Size(0, 17);
+            this.lb_re_sum.TabIndex = 30;
+            // 
+            // lb_re_date
+            // 
+            this.lb_re_date.AutoSize = true;
+            this.lb_re_date.Location = new System.Drawing.Point(925, 586);
+            this.lb_re_date.Name = "lb_re_date";
+            this.lb_re_date.Size = new System.Drawing.Size(0, 17);
+            this.lb_re_date.TabIndex = 29;
+            // 
+            // lb_re_customer
+            // 
+            this.lb_re_customer.AutoSize = true;
+            this.lb_re_customer.Location = new System.Drawing.Point(925, 527);
+            this.lb_re_customer.Name = "lb_re_customer";
+            this.lb_re_customer.Size = new System.Drawing.Size(0, 17);
+            this.lb_re_customer.TabIndex = 28;
+            // 
+            // lb_fx_re_date
+            // 
+            this.lb_fx_re_date.AutoSize = true;
+            this.lb_fx_re_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_re_date.Location = new System.Drawing.Point(842, 586);
+            this.lb_fx_re_date.Name = "lb_fx_re_date";
+            this.lb_fx_re_date.Size = new System.Drawing.Size(59, 17);
+            this.lb_fx_re_date.TabIndex = 27;
+            this.lb_fx_re_date.Text = "Datum:";
+            // 
+            // lb_fx_re_sum
+            // 
+            this.lb_fx_re_sum.AutoSize = true;
+            this.lb_fx_re_sum.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_re_sum.Location = new System.Drawing.Point(842, 557);
+            this.lb_fx_re_sum.Name = "lb_fx_re_sum";
+            this.lb_fx_re_sum.Size = new System.Drawing.Size(61, 17);
+            this.lb_fx_re_sum.TabIndex = 26;
+            this.lb_fx_re_sum.Text = "Betrag:";
+            // 
+            // lb_fx_re_customer
+            // 
+            this.lb_fx_re_customer.AutoSize = true;
+            this.lb_fx_re_customer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_re_customer.Location = new System.Drawing.Point(842, 527);
+            this.lb_fx_re_customer.Name = "lb_fx_re_customer";
+            this.lb_fx_re_customer.Size = new System.Drawing.Size(59, 17);
+            this.lb_fx_re_customer.TabIndex = 25;
+            this.lb_fx_re_customer.Text = "Kunde:";
+            // 
+            // lb_fx_re_title
+            // 
+            this.lb_fx_re_title.AutoSize = true;
+            this.lb_fx_re_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_re_title.Location = new System.Drawing.Point(840, 486);
+            this.lb_fx_re_title.Name = "lb_fx_re_title";
+            this.lb_fx_re_title.Size = new System.Drawing.Size(250, 25);
+            this.lb_fx_re_title.TabIndex = 24;
+            this.lb_fx_re_title.Text = "Rechnungsinformationen";
+            // 
+            // lb_fx_account_title
+            // 
+            this.lb_fx_account_title.AutoSize = true;
+            this.lb_fx_account_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_fx_account_title.Location = new System.Drawing.Point(840, 286);
+            this.lb_fx_account_title.Name = "lb_fx_account_title";
+            this.lb_fx_account_title.Size = new System.Drawing.Size(81, 25);
+            this.lb_fx_account_title.TabIndex = 31;
+            this.lb_fx_account_title.Text = "Konten";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1283, 536);
-            this.Controls.Add(this.lb_sum);
-            this.Controls.Add(this.lb_date);
-            this.Controls.Add(this.lb_fee);
-            this.Controls.Add(this.lb_customer);
+            this.ClientSize = new System.Drawing.Size(1283, 680);
+            this.Controls.Add(this.lb_fx_account_title);
+            this.Controls.Add(this.lb_re_sum);
+            this.Controls.Add(this.lb_re_date);
+            this.Controls.Add(this.lb_re_customer);
+            this.Controls.Add(this.lb_fx_re_date);
+            this.Controls.Add(this.lb_fx_re_sum);
+            this.Controls.Add(this.lb_fx_re_customer);
+            this.Controls.Add(this.lb_fx_re_title);
+            this.Controls.Add(this.lb_pp_sum);
+            this.Controls.Add(this.lb_pp_date);
+            this.Controls.Add(this.lb_pp_fee);
+            this.Controls.Add(this.lb_pp_customer);
             this.Controls.Add(this.tb_ggaccount);
             this.Controls.Add(this.tb_account);
             this.Controls.Add(this.lb_fx_invoice);
-            this.Controls.Add(this.lb_fx_fee);
+            this.Controls.Add(this.lb_fx_pp_fee);
             this.Controls.Add(this.lb_fx_account);
             this.Controls.Add(this.lb_fx_ggaccount);
-            this.Controls.Add(this.lb_fx_date);
-            this.Controls.Add(this.lb_fx_sum);
-            this.Controls.Add(this.lb_fx_customer);
-            this.Controls.Add(this.lb_fx_title);
+            this.Controls.Add(this.lb_fx_pp_date);
+            this.Controls.Add(this.lb_fx_pp_sum);
+            this.Controls.Add(this.lb_fx_pp_customer);
+            this.Controls.Add(this.lb_fx_pp_title);
             this.Controls.Add(this.btn_addinvoice);
             this.Controls.Add(this.cb_invoice);
             this.Controls.Add(this.splitter1);
@@ -317,7 +407,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.myTable);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(900, 500);
+            this.MinimumSize = new System.Drawing.Size(900, 700);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -340,20 +430,28 @@
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ComboBox cb_invoice;
         private System.Windows.Forms.Button btn_addinvoice;
-        private System.Windows.Forms.Label lb_fx_title;
-        private System.Windows.Forms.Label lb_fx_customer;
-        private System.Windows.Forms.Label lb_fx_sum;
-        private System.Windows.Forms.Label lb_fx_date;
+        private System.Windows.Forms.Label lb_fx_pp_title;
+        private System.Windows.Forms.Label lb_fx_pp_customer;
+        private System.Windows.Forms.Label lb_fx_pp_sum;
+        private System.Windows.Forms.Label lb_fx_pp_date;
         private System.Windows.Forms.Label lb_fx_ggaccount;
         private System.Windows.Forms.Label lb_fx_account;
-        private System.Windows.Forms.Label lb_fx_fee;
+        private System.Windows.Forms.Label lb_fx_pp_fee;
         private System.Windows.Forms.Label lb_fx_invoice;
         private System.Windows.Forms.TextBox tb_account;
         private System.Windows.Forms.TextBox tb_ggaccount;
-        private System.Windows.Forms.Label lb_customer;
-        private System.Windows.Forms.Label lb_fee;
-        private System.Windows.Forms.Label lb_date;
-        private System.Windows.Forms.Label lb_sum;
+        private System.Windows.Forms.Label lb_pp_customer;
+        private System.Windows.Forms.Label lb_pp_fee;
+        private System.Windows.Forms.Label lb_pp_date;
+        private System.Windows.Forms.Label lb_pp_sum;
+        private System.Windows.Forms.Label lb_re_sum;
+        private System.Windows.Forms.Label lb_re_date;
+        private System.Windows.Forms.Label lb_re_customer;
+        private System.Windows.Forms.Label lb_fx_re_date;
+        private System.Windows.Forms.Label lb_fx_re_sum;
+        private System.Windows.Forms.Label lb_fx_re_customer;
+        private System.Windows.Forms.Label lb_fx_re_title;
+        private System.Windows.Forms.Label lb_fx_account_title;
     }
 }
 

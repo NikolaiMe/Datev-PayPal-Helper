@@ -38,15 +38,24 @@ namespace Reiner_Autoworker
         private const int XPOS_LEFT = 280;
         private const int XPOS_TAB1 = 200;
 
-        private const int CB_INVOICE_YPOS = 320;
-        private const int LB_INVOICE_YPOS = 300;
-        private const int LB_GGACCOUNT_YPOS = 270;
-        private const int LB_ACCOUNT_YPOS = 240;
-        private const int LB_FEE_YPOS = 200;
-        private const int LB_DATE_YPOS = 180;
-        private const int LB_SUM_YPOS = 160;
-        private const int LB_CUSTOMER_YPOS = 140;
-        private const int LB_TITLE_YPOS = 100;
+
+        private const int LB_DATE_RE_YPOS = LB_SUM_RE_YPOS + 20;
+        private const int LB_SUM_RE_YPOS = LB_CUSTOMER_RE_YPOS + 20;
+        private const int LB_CUSTOMER_RE_YPOS = CB_INVOICE_YPOS + 30;
+        private const int CB_INVOICE_YPOS = LB_INVOICE_YPOS + 20;
+        private const int LB_INVOICE_YPOS = LB_TITLE_RE_YPOS + 30;
+        private const int LB_TITLE_RE_YPOS = 240;
+
+
+        private const int LB_GGACCOUNT_YPOS = LB_ACCOUNT_YPOS + 30;
+        private const int LB_ACCOUNT_YPOS = LB_ACCOUNT_TITLE_YPOS + 30;
+        private const int LB_ACCOUNT_TITLE_YPOS = 410;
+
+        private const int LB_FEE_PP_YPOS = LB_DATE_PP_YPOS + 20;
+        private const int LB_DATE_PP_YPOS = LB_SUM_PP_YPOS + 20;
+        private const int LB_SUM_PP_YPOS = LB_CUSTOMER_PP_YPOS + 20;
+        private const int LB_CUSTOMER_PP_YPOS = LB_TITLE_PP_YPOS + 30;
+        private const int LB_TITLE_PP_YPOS = 100;
 
 
 
@@ -65,24 +74,36 @@ namespace Reiner_Autoworker
         {
             Control control = (Control)sender;
             myTable.Size = new Size(control.Width - 300, control.Height - 170);
+
             cb_invoice.Size = new Size(220, 24);
             btn_addinvoice.Size = new Size(21, 21);
-
             cb_invoice.Location = new Point(control.Width - XPOS_LEFT, CB_INVOICE_YPOS);
             btn_addinvoice.Location = new Point(control.Width - 55, CB_INVOICE_YPOS);
             lb_fx_invoice.Location =new Point(control.Width - XPOS_LEFT, LB_INVOICE_YPOS);
-            lb_fx_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_YPOS);
-            lb_fx_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_YPOS);
-            lb_fx_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_YPOS);
-            lb_fx_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_YPOS);
-            lb_fx_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_YPOS);
+
+            lb_fx_pp_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_PP_YPOS);
+            lb_fx_pp_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_PP_YPOS);
+            lb_fx_pp_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_PP_YPOS);
+            lb_fx_pp_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_PP_YPOS);
+            lb_fx_pp_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_PP_YPOS);
+
+            lb_pp_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_PP_YPOS);
+            lb_pp_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_PP_YPOS);
+            lb_pp_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_PP_YPOS);
+            lb_pp_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_PP_YPOS);
+
+            lb_fx_re_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_RE_YPOS);
+            lb_fx_re_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_RE_YPOS);
+            lb_fx_re_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_RE_YPOS);
+            lb_fx_re_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_RE_YPOS);
+
+            lb_re_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_RE_YPOS);
+            lb_re_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_RE_YPOS);
+            lb_re_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_RE_YPOS);
+
+            lb_fx_account_title.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_TITLE_YPOS);
             lb_fx_account.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_YPOS);
             lb_fx_ggaccount.Location = new Point(control.Width - XPOS_LEFT, LB_GGACCOUNT_YPOS);
-
-            lb_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_YPOS);
-            lb_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_YPOS);
-            lb_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_YPOS);
-            lb_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_YPOS);
             tb_account.Location = new Point(control.Width - XPOS_TAB1, LB_ACCOUNT_YPOS);
             tb_ggaccount.Location = new Point(control.Width - XPOS_TAB1, LB_GGACCOUNT_YPOS);
 
@@ -96,20 +117,31 @@ namespace Reiner_Autoworker
             cb_invoice.Location = new Point(control.Width - XPOS_LEFT, CB_INVOICE_YPOS);
             btn_addinvoice.Location = new Point(control.Width - 55, CB_INVOICE_YPOS);
             lb_fx_invoice.Location = new Point(control.Width - XPOS_LEFT, LB_INVOICE_YPOS);
-            lb_fx_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_YPOS);
-            lb_fx_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_YPOS);
-            lb_fx_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_YPOS);
-            lb_fx_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_YPOS);
-            lb_fx_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_YPOS);
+            lb_fx_pp_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_PP_YPOS);
+            lb_fx_pp_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_PP_YPOS);
+            lb_fx_pp_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_PP_YPOS);
+            lb_fx_pp_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_PP_YPOS);
+            lb_fx_pp_fee.Location = new Point(control.Width - XPOS_LEFT, LB_FEE_PP_YPOS);
+
+            lb_pp_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_PP_YPOS);
+            lb_pp_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_PP_YPOS);
+            lb_pp_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_PP_YPOS);
+            lb_pp_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_PP_YPOS);
+
+            lb_fx_account_title.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_TITLE_YPOS);
+            tb_account.Location = new Point(control.Width - XPOS_TAB1, LB_ACCOUNT_YPOS);
+            tb_ggaccount.Location = new Point(control.Width - XPOS_TAB1, LB_GGACCOUNT_YPOS);
             lb_fx_account.Location = new Point(control.Width - XPOS_LEFT, LB_ACCOUNT_YPOS);
             lb_fx_ggaccount.Location = new Point(control.Width - XPOS_LEFT, LB_GGACCOUNT_YPOS);
 
-            lb_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_YPOS);
-            lb_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_YPOS);
-            lb_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_YPOS);
-            lb_fee.Location = new Point(control.Width - XPOS_TAB1, LB_FEE_YPOS);
-            tb_account.Location = new Point(control.Width - XPOS_TAB1, LB_ACCOUNT_YPOS);
-            tb_ggaccount.Location = new Point(control.Width - XPOS_TAB1, LB_GGACCOUNT_YPOS);
+            lb_fx_re_title.Location = new Point(control.Width - XPOS_LEFT, LB_TITLE_RE_YPOS);
+            lb_fx_re_customer.Location = new Point(control.Width - XPOS_LEFT, LB_CUSTOMER_RE_YPOS);
+            lb_fx_re_date.Location = new Point(control.Width - XPOS_LEFT, LB_DATE_RE_YPOS);
+            lb_fx_re_sum.Location = new Point(control.Width - XPOS_LEFT, LB_SUM_RE_YPOS);
+
+            lb_re_customer.Location = new Point(control.Width - XPOS_TAB1, LB_CUSTOMER_RE_YPOS);
+            lb_re_date.Location = new Point(control.Width - XPOS_TAB1, LB_DATE_RE_YPOS);
+            lb_re_sum.Location = new Point(control.Width - XPOS_TAB1, LB_SUM_RE_YPOS);
         }
 
         private void paypalButton_Click(object sender, EventArgs e)
@@ -141,7 +173,6 @@ namespace Reiner_Autoworker
             }
         }
 
-        //todo unsureList richtig implementieren
 
 
         private void myTable_SelectionChanged(object sender, EventArgs e)
@@ -157,13 +188,26 @@ namespace Reiner_Autoworker
                 if (invoiceNumberList.Count > 0)
                 {
                     cb_invoice.SelectedIndex = datenSatz[selectedRowNumber].invoiceIndex;
+                    lb_re_customer.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].customerName;
+                    lb_re_sum.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].sum.ToString() + " " + datenSatz[selectedRowNumber].currency;
+                    lb_re_date.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].date.ToString("dd.MM.yyyy - HH:mm") + " Uhr";
+                }
+                else
+                {
+                    lb_re_customer.Text = "";
+                    lb_re_sum.Text = "";
+                    lb_re_date.Text = "";
                 }
 
-                lb_customer.Text = datenSatz[selectedRowNumber].customerName;
-                lb_sum.Text = datenSatz[selectedRowNumber].sum.ToString() + " " + datenSatz[selectedRowNumber].currency;
-                lb_fee.Text = datenSatz[selectedRowNumber].fee.ToString() + " " + datenSatz[selectedRowNumber].currency;
-                lb_date.Text = datenSatz[selectedRowNumber].date.ToString("dd.MM.yyyy - HH:mm")+" Uhr";
-             }
+                lb_pp_customer.Text = datenSatz[selectedRowNumber].customerName;
+                lb_pp_sum.Text = datenSatz[selectedRowNumber].sum.ToString() + " " + datenSatz[selectedRowNumber].currency;
+                lb_pp_fee.Text = datenSatz[selectedRowNumber].fee.ToString() + " " + datenSatz[selectedRowNumber].currency;
+                lb_pp_date.Text = datenSatz[selectedRowNumber].date.ToString("dd.MM.yyyy - HH:mm")+" Uhr";
+
+                if (datenSatz[selectedRowNumber].invoiceIndex >= 0)
+                {
+                    }
+            }
         }
 
 
@@ -176,6 +220,10 @@ namespace Reiner_Autoworker
             datenSatz[selectedRowNumber].invoiceIndex = cb_invoice.SelectedIndex;
             datenSatz[selectedRowNumber].invoiceNumber = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].invoiceNumber;
             refreshTable();
+
+            lb_re_customer.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].customerName;
+            lb_re_sum.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].sum.ToString() + " " + datenSatz[selectedRowNumber].currency;
+            lb_re_date.Text = datenSatz[selectedRowNumber].invoiceList[datenSatz[selectedRowNumber].invoiceIndex].date.ToString("dd.MM.yyyy - HH:mm") + " Uhr";
         }
 
         private void addInvoiceNr_btn_Click(object sender, EventArgs e)
@@ -370,6 +418,7 @@ namespace Reiner_Autoworker
                         {
                             payPal.invoiceNumber = ebay.invoiceNumber;
                             payPal.invoiceList.Add(ebay);
+                            payPal.invoiceIndex = 0;
                             payPal.invoiceNumberState = InvoiceState.SAFE;
                         }
                     }
@@ -398,6 +447,7 @@ namespace Reiner_Autoworker
                     trans.invoiceList = new List<Transaction>(onlineShopList.Where(osTrans => trans.outputName.ToUpper().Contains(osTrans.customerName.ToUpper())));
                     if (trans.invoiceList.Count() > 0)
                     {
+                        trans.invoiceIndex = 0;
                         //Filtern nach Betrag
                         var supportList = trans.invoiceList.Where(osTrans => trans.sum == osTrans.sum);
                         if (supportList.Count() == 1) // Eindeutige Zuordnung erfolgt
@@ -424,6 +474,7 @@ namespace Reiner_Autoworker
                         trans.invoiceList = new List<Transaction>(onlineShopList.Where(osTrans2 => trans.sum == osTrans2.sum));
                         if (trans.invoiceList.Count > 0)
                         {
+                            trans.invoiceIndex = 0;
                             trans.invoiceNumber = trans.invoiceList.First().invoiceNumber;
                             trans.invoiceNumberState = InvoiceState.UNSURE_NAME;
                         }

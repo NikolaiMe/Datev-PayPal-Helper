@@ -81,7 +81,7 @@ namespace Reiner_Autoworker.DataStructures
         public bool nameIssueFound { get; private set; } = false;        //Shall be set true if name contains more than three words or something like "GBR" or "GmbH"...
         public bool foreignCurrencyFound { get; private set; } = false;
         public List<Transaction> invoiceList {get;set;} // If there are several possibilities for Invoices
-        public int invoiceIndex { get; set; } = 0;
+        public int invoiceIndex { get; set; } = -1;
 
         public payPalTransaction(string customerName, string sum, string transID, string currency, string transType, string transReason, string fee, string timeDate) : base(customerName, sum)
         {
