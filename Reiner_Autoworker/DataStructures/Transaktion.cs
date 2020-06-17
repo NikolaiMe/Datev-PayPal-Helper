@@ -45,6 +45,8 @@ namespace Reiner_Autoworker.DataStructures
             }
             return fSum;
         }
+
+
     }
     public enum TransTypes {SOLL, HABEN, MEMO, ERROR};
     public enum TransReasons {EBAY, ONLINESHOP, REPAYMENT, DEBIT, TRANSLATION, ERROR};
@@ -199,12 +201,22 @@ namespace Reiner_Autoworker.DataStructures
     public class ebayPPTransaction : Transaction
     {
         public string transID { get; private set; }                 //The paypal identification number of the transaction
+        public string taxRate { get; private set; }
+        public float salePrice { get; private set; }
+        public float shippingPrice { get; private set; }
 
-        public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber, string paidOn):base(name, sum)
+        public float salePrice19 { get; set; }
+        public float salePrice5 { get; set; }
+        public float salePrice0 { get; set; }
+
+        public ebayPPTransaction(string name, string sum, string paypalTransactionCode, string invoiceNumber, string paidOn, string taxRate, string salePrice, string shippingPrice) :base(name, sum)
         {
             this.transID = paypalTransactionCode;
             this.invoiceNumber = invoiceNumber;
             this.date = convertDate(paidOn);
+            this.taxRate = taxRate;
+            this.salePrice = convertSum(salePrice);
+            this.shippingPrice = convertSum(shippingPrice);
         }
 
         private DateTime convertDate(string timeDate)

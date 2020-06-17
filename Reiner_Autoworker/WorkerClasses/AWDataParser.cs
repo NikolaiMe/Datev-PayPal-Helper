@@ -119,8 +119,8 @@ namespace Reiner_Autoworker.WorkerClasses
     class ebayPPParser
     {
         public const int DATA_ERROR = 1, DATA_NOT_FOUND_ERROR = 2, FILE_NOT_FOUND_ERROR = 3;
-        private string[] titleArrayEN = new string[] {"Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number", "Paid on Date" };
-        private string[] titleArrayDE = new string[] {"Vollständiger Name des Käufers", "Gesamtpreis", "PayPal Transaktions-ID", "Rechnungsnummer","Bezahlt am"};
+        private string[] titleArrayEN = new string[] {"Buyer Fullname", "Total Price", "PayPal Transaction ID", "Invoice Number", "Paid on Date", "Included VAT Rate", "Sale Price", "Shipping And Handling" };
+        private string[] titleArrayDE = new string[] {"Vollständiger Name des Käufers", "Gesamtpreis", "PayPal Transaktions-ID", "Rechnungsnummer","Bezahlt am", "Inklusive Mehrwertsteuersatz", "Verkaufspreis", "Verpackung und Versand" };
         String fileLocation;
         EbayParseCompletedCallBack callback;
 
@@ -196,7 +196,15 @@ namespace Reiner_Autoworker.WorkerClasses
                             {
                                 //Process row
                                 string[] fields = parser.ReadFields();
-                                liste.Add(new ebayPPTransaction(fields[dataPositions[0]], fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), fields[dataPositions[2]], fields[dataPositions[3]], fields[dataPositions[4]]));
+                                liste.Add(new ebayPPTransaction(
+                                    fields[dataPositions[0]], 
+                                    fields[dataPositions[1]].Substring(findFirstNumber(fields[dataPositions[1]])), 
+                                    fields[dataPositions[2]], fields[dataPositions[3]], 
+                                    fields[dataPositions[4]], 
+                                    fields[dataPositions[5]],
+                                    fields[dataPositions[6]].Substring(findFirstNumber(fields[dataPositions[6]])),
+                                    fields[dataPositions[7]].Substring(findFirstNumber(fields[dataPositions[7]]))
+                                    ));
                             }
 
                             callback(liste, 0);

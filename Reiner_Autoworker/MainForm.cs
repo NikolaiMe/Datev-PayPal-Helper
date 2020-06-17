@@ -408,18 +408,43 @@ namespace Reiner_Autoworker
         {
 
             var ebayPPTransactions = datenSatz.Where(trans => trans.transReason == TransReasons.EBAY);
+            Boolean searchForTax = false;
             if (errorCode == 0)
             {
                 foreach (payPalTransaction payPal in ebayPPTransactions)
                 {
                     foreach (ebayPPTransaction ebay in ebayList)
                     {
-                        if (payPal.transID.Equals(ebay.transID))
+                        if (ebay.invoiceNumber.Equals("") && searchForTax)
                         {
-                            payPal.invoiceNumber = ebay.invoiceNumber;
-                            payPal.invoiceList.Add(ebay);
-                            payPal.invoiceIndex = 0;
-                            payPal.invoiceNumberState = InvoiceState.SAFE;
+                            switch (ebay.taxRate) // Todo: Anhand dieser Daten die ebayPPTransaction.taxRate anpassen
+                            {
+                                case "19%":
+                                    ((ebayPPTransaction)payPal.invoiceList[0]).salePrice19 += ebay.salePrice;
+                                    break;
+                                case "5%":
+                                    ((ebayPPTransaction)payPal.invoiceList[0]).salePrice5 += ebay.salePrice;
+                                    break;
+                                case "0%":
+                                    ((ebayPPTransaction)payPal.invoiceList[0]).salePrice0 += ebay.salePrice;
+                                    break;
+                                default:
+                                    ((ebayPPTransaction)payPal.invoiceList[0]).salePrice0 += ebay.salePrice;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            searchForTax = false;
+                            if (payPal.transID.Equals(ebay.transID))
+                            {
+                                payPal.invoiceNumber = ebay.invoiceNumber;
+                                payPal.invoiceList.Add(ebay);
+                                payPal.invoiceIndex = 0;
+                                payPal.invoiceNumberState = InvoiceState.SAFE;
+
+                                if (ebay.taxRate.Equals("")) searchForTax = true;
+                            }
                         }
                     }
                 }
